@@ -11,10 +11,6 @@ import java.util.Date;
 @ApiModel(description = "Branch object")
 @Data
 public class BranchDto {
-    @ApiModelProperty(value = "Branch ID")
-    private Long id;
-    //name should not be null or empty
-    //name should have at least 2 characters
     @NotEmpty(message = "Name of the bank is required")
     @Size(min = 2, message = "Name must have at least 2 characters")
     @ApiModelProperty(value = "Branch name")
@@ -24,7 +20,6 @@ public class BranchDto {
     private String branchCode;
     @ApiModelProperty(value = "Branch status")
     private boolean status=true;
-    @ApiModelProperty(value = "Branch creation date")
-    private Date createdDate;
+
 
 }

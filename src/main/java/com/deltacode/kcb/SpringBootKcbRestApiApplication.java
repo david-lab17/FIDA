@@ -11,11 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class SpringBootKcbRestApiApplication implements CommandLineRunner {
-	public SpringBootKcbRestApiApplication(RoleRepository roleRepository) {
-		this.roleRepository = roleRepository;
-	}
-
+public class SpringBootKcbRestApiApplication  {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
@@ -27,17 +23,17 @@ public class SpringBootKcbRestApiApplication implements CommandLineRunner {
 	}
 
 
-	private final RoleRepository roleRepository;
-	@Override
-	public void run(String... args) throws Exception {
-		Role adminRole=new Role();
-		adminRole.setName("ROLE_ADMIN");
-		roleRepository.save(adminRole);
-
-		Role userRole=new Role();
-		userRole.setName("ROLE_USER");
-		roleRepository.save(userRole);
-
-	}
+//	private final RoleRepository roleRepository;
+//	@Override
+//	public void run(String... args) throws Exception {
+//		Role adminRole=new Role();
+//		adminRole.setName("ROLE_ADMIN");
+//		roleRepository.save(adminRole);
+//
+//		Role userRole=new Role();
+//		userRole.setName("ROLE_USER");
+//		roleRepository.save(userRole);
+//
+//	}
 }
 

@@ -10,8 +10,6 @@ import javax.validation.constraints.Size;
 @ApiModel(description = "Team object")
 @Data
 public class TeamDto {
-    @ApiModelProperty(value = "Team ID")
-    private Long id;
 
     @NotEmpty(message = "Name is required")
     @Size(min = 2, message = "Name must have at least 2 characters")

@@ -11,10 +11,6 @@ import java.util.Date;
 @ApiModel(description = "Bank object")
 @Data
 public class BankDto {
-    @ApiModelProperty(value = "Bank ID")
-    private Long id;
-    //name should not be null or empty
-    //name should have at least 2 characters
     @NotEmpty(message = "Name of the bank is required")
     @Size(min = 2, message = "Name must have at least 2 characters")
     @ApiModelProperty(value = "Bank name")
@@ -24,7 +20,6 @@ public class BankDto {
     private String bankCode;
     @ApiModelProperty(value = "Bank status")
     private boolean status=true;
-    @ApiModelProperty(value = "Bank creation date")
-    private Date createdDate;
+
 
 }

@@ -11,8 +11,6 @@ import java.util.Date;
 @ApiModel(description = "Zone Object")
 
 public class ZoneDto {
-    @ApiModelProperty(value = "Zone ID")
-    private Long id;
     @NotEmpty(message = "Name is required")
     @Size(min = 2, message = "Name must have at least 2 characters")
     @ApiModelProperty(value = "Zone name")
@@ -27,7 +25,6 @@ public class ZoneDto {
     private String zoneDescription;
     @ApiModelProperty(value = "Zone status")
     private  Boolean status=true;
-    private Date createdDate;
 
 
 }
