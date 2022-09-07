@@ -23,6 +23,6 @@ public class Zone {
     private Boolean status=true;
     @CreatedDate
     private Date createdDate;
-    @OneToMany(mappedBy = "zone",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Team> teams =new HashSet<>();
 }

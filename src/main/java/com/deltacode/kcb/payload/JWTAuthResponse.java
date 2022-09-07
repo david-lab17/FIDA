@@ -4,8 +4,9 @@ public class JWTAuthResponse {
     private String accessToken;
     private String tokenType;
 
-    public JWTAuthResponse(String accessToken) {
+    public JWTAuthResponse(String accessToken, String tokenType) {
         this.accessToken = accessToken;
+        this.tokenType = tokenType;
     }
 
     public String getAccessToken() {
