@@ -1,7 +1,6 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.ComplaintType;
-import com.deltacode.kcb.payload.BusinessTypeDto;
 import com.deltacode.kcb.payload.ComplaintTypeDto;
 import com.deltacode.kcb.payload.ComplaintTypeResponse;
 import com.deltacode.kcb.repository.ComplaintTypeRepository;

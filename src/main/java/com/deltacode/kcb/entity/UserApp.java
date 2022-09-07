@@ -2,6 +2,7 @@ package com.deltacode.kcb.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,6 +23,7 @@ public class UserApp {
     private String lastName;
     private String phoneNumber;
     private String middleName;
+    @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date dateOfBirth;
     @CreatedDate
     private Date createdDate;

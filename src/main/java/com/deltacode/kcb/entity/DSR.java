@@ -5,7 +5,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @Entity
