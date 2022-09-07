@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
 import java.util.UUID;
-@CrossOrigin(origins = "/**")
+@CrossOrigin(origins = "*")
 @Api(value = "Auth Controller for Field Agent Rest Api")
 @RestController
 @RequestMapping("/api/auth")
