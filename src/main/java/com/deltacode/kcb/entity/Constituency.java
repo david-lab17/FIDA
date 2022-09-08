@@ -14,15 +14,24 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "business_type_tb")
-public class BusinessType {
+@Table(
+        name = "constituency_tb",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"constituencyName"}),
+                @UniqueConstraint(columnNames = {"constituencyCode"})}
+)
+public class Constituency {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
     private Long id;
-    private String businessTypeName;
+    private String constituencyName;
+    private Integer  constituencyCode;
+    private String description;
     private Boolean status=true;
     @CreationTimestamp
     private LocalDateTime createdDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "county_id",nullable = false)
+    private County county;
 }

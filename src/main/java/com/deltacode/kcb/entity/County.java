@@ -3,10 +3,15 @@ package com.deltacode.kcb.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +31,8 @@ public class County {
     private Integer  countyCode;
     private String description;
     private Boolean status=true;
-    @CreatedDate
-    private Date createdDate;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
+    @OneToMany(mappedBy = "county", cascade = CascadeType.ALL,orphanRemoval = true)
+    private Set<Constituency> teams =new HashSet<>();
 }

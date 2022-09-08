@@ -1,10 +1,12 @@
 package com.deltacode.kcb.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,8 +27,8 @@ public class UserApp {
     private String middleName;
     @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date dateOfBirth;
-    @CreatedDate
-    private Date createdDate;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)

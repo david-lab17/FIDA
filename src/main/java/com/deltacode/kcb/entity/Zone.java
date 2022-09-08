@@ -2,9 +2,11 @@ package com.deltacode.kcb.entity;
 
 import com.fasterxml.jackson.databind.Module;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,8 +23,8 @@ public class Zone {
     private String zoneCode;
     private String zoneDescription;
     private Boolean status=true;
-    @CreatedDate
-    private Date createdDate;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
     @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Team> teams =new HashSet<>();
 }

@@ -79,7 +79,6 @@ public class CountyServiceImpl implements CountyService {
     private CountyDto mapToDto(County county) {
 
         return modelMapper.map(county, CountyDto .class);
-
     }
     //convert dto to entity
     private County mapToEntity(CountyDto countyDto) {

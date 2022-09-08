@@ -3,9 +3,11 @@ package com.deltacode.kcb.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,8 +27,8 @@ public class Team {
     private Boolean status=true;
     private String teamCode;
     private String teamManager;
-    @CreatedDate
-    private Date createdDate;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zone_id",nullable = false)
     private Zone zone;

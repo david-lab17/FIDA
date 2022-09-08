@@ -1,9 +1,11 @@
 package com.deltacode.kcb.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -24,8 +26,8 @@ public class DSR {
     private String lastName;
     private String phoneNumber;
     private String middleName;
-    @CreatedDate
-    private Date createdDate;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 //    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 //    @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "role_id"))
