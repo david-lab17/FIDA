@@ -11,7 +11,7 @@ import java.util.Date;
 @ApiModel(description = "Account Type object")
 @Data
 public class AccountTypeDto {
-    @NotEmpty(message = "Name of the bank is required")
+    @NotEmpty(message = "Name of the Acc Type is required")
     @Size(min = 2, message = "Account Type Name must have at least 2 characters")
     @ApiModelProperty(value = "Acc Type  name")
     private String accountTypeName;

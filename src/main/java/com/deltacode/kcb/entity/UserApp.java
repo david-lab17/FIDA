@@ -26,7 +26,7 @@ public class UserApp {
     private String phoneNumber;
     private String middleName;
     @DateTimeFormat(pattern="dd/MM/yyyy")
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
     @CreationTimestamp
     private LocalDateTime createdDate;
     @Column(name = "reset_password_token")
