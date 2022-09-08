@@ -53,7 +53,7 @@ public class ComplaintTypeImpl implements ComplaintTypeService {
 
     @Override
     public ComplaintTypeDto getComplaintTypesById(Long id) {
-        ComplaintType complaintType = complaintTypeRepository.findById(id).orElseThrow();
+        ComplaintType complaintType = complaintTypeRepository.findById(id).orElseThrow( () -> new RuntimeException("Complaint Type not found"));
         return modelMapper.map(complaintType, ComplaintTypeDto.class);
     }
 
