@@ -30,4 +30,7 @@ public class Ward {
     private Boolean status=true;
     @CreationTimestamp
     private LocalDateTime createdDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "constituency_id",nullable = false)
+    private Constituency constituency;
 }
