@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @ApiModel(description = "Constituency object")
 @Data
@@ -26,6 +27,7 @@ public class ConstituencyDto {
     private String description;
     @ApiModelProperty(value = "Constituency status")
     private boolean status=true;
+    private Set<WardDto> ward;
 
 
 }

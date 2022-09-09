@@ -63,7 +63,6 @@ public class TeamServiceImpl implements TeamService {
         team.setTeamCode(teamDto.getTeamCode());
         team.setTeamManager(teamDto.getTeamManager());
         team.setStatus(teamDto.getStatus());
-        team.setZone(teamDto.getZone());
         teamRepository.save(team);
         return modelMapper.map(team, TeamDto.class);
     }

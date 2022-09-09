@@ -26,15 +26,12 @@ public class DSR {
     private String lastName;
     private String phoneNumber;
     private String middleName;
+    private Boolean status=true;
+    private Boolean gender;
     @CreationTimestamp
     private LocalDateTime createdDate;
-//    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-//    @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private Set<Role> roles;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id",nullable = false)
     private Team team;
-    private Boolean status=true;
-    private Boolean gender;
+
 }

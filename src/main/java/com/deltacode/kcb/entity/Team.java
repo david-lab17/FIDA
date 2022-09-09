@@ -1,5 +1,6 @@
 package com.deltacode.kcb.entity;
 
+import com.deltacode.kcb.payload.DSRDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +32,8 @@ public class Team {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zone_id",nullable = false)
     private Zone zone;
-    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<DSR> dsr =new HashSet<>();
+
+    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
+    private Set<DSR> dsr;
 }
 

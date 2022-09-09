@@ -1,5 +1,6 @@
 package com.deltacode.kcb.payload;
 
+import com.deltacode.kcb.entity.DSR;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,6 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @ApiModel(description = "Zone Object")
 
@@ -28,6 +32,7 @@ public class ZoneDto {
     private String zoneDescription;
     @ApiModelProperty(value = "Zone status")
     private  Boolean status=true;
+    private Set<TeamDto> team;
 
 
 }

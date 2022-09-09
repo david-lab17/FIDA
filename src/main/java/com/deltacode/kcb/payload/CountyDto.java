@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @ApiModel(description = "County object")
 @Data
@@ -24,6 +25,7 @@ public class CountyDto {
     private String description;
     @ApiModelProperty(value = "County status")
     private boolean status=true;
+    private Set<CountyDto> constituency;
 
 
 }

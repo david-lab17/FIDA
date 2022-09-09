@@ -1,5 +1,6 @@
 package com.deltacode.kcb.payload;
 
+import com.deltacode.kcb.entity.DSR;
 import com.deltacode.kcb.entity.Zone;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,6 +9,8 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @ApiModel(description = "Team object")
 @Data
@@ -31,7 +34,6 @@ public class TeamDto {
     @Size(min = 10, message = "Description Name must have at least 2 characters")
     @ApiModelProperty(value = " Team Description")
     private String description;
-    @NotEmpty(message = "Zone is required")
-    @ApiModelProperty(value = "Team  zone")
-    private Zone zone;
+    private Set<DSRDto> dsr;
+
 }
