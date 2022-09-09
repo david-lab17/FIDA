@@ -7,10 +7,13 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+
 @ApiModel(description = "Team object")
 @Data
 public class TeamDto {
-
+    private Long id;
+    private LocalDateTime createdDate;
     @NotEmpty(message = "Name is required")
     @Size(min = 2, message = "Name must have at least 2 characters")
     @ApiModelProperty(value = "Team name")

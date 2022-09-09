@@ -24,11 +24,11 @@ public class County {
     )
     private Long id;
     private String countyName;
-    private Integer  countyCode;
+    private String  countyCode;
     private String description;
     private Boolean status=true;
     @CreationTimestamp
     private LocalDateTime createdDate;
     @OneToMany(mappedBy = "county", cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<Constituency> teams =new HashSet<>();
+    private Set<Constituency> constituencies =new HashSet<>();
 }

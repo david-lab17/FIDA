@@ -6,17 +6,20 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @ApiModel(description = "Constituency object")
 @Data
 public class ConstituencyDto {
+    private Long id;
+    private LocalDateTime createdDate;
     @NotEmpty(message = "Name of the Constituency is required")
     @Size(min = 2, message = "Name must have at least 2 characters")
     @ApiModelProperty(value = "Constituency name")
     private String constituencyName;
     @NotEmpty(message = "Constituency code is required")
     @ApiModelProperty(value = "Constituency code")
-    private Integer constituencyCode;
+    private String constituencyCode;
     @ApiModelProperty(value="Constituency description")
     private String description;
     @ApiModelProperty(value = "Constituency status")

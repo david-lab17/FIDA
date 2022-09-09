@@ -24,8 +24,7 @@ public class Ward {
     )
     private Long id;
     private String wardName;
-    private Integer  wardCode;
-    private String constituencyCode;
+    private String  wardCode;
     private String description;
     private Boolean status=true;
     @CreationTimestamp

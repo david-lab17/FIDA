@@ -16,8 +16,9 @@ public class WardDto {
     private String wardName;
     @NotEmpty(message = "Ward code is required")
     @ApiModelProperty(value = "Ward code")
-    private Integer wardCode;
-    @ApiModelProperty(value="Ward description")
+    private String wardCode;
+    @ApiModelProperty(value="Constituency description")
+
     private String description;
     @ApiModelProperty(value = "Ward status")
     private boolean status=true;

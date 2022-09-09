@@ -6,9 +6,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @ApiModel(description = "Direct Sale Representative requirements")
 public class DSRDto {
+    private Long id;
+    private LocalDateTime createdDate;
     @ApiModelProperty(value = "User's staff No", required = true)
     private String username;
     @ApiModelProperty(value = "User's first name", required = true)

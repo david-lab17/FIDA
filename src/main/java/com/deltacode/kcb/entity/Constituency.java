@@ -28,7 +28,7 @@ public class Constituency {
     )
     private Long id;
     private String constituencyName;
-    private Integer  constituencyCode;
+    private String  constituencyCode;
     private String description;
     private Boolean status=true;
     @CreationTimestamp
