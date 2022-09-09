@@ -1,5 +1,7 @@
 package com.deltacode.kcb.payload;
 
+import com.deltacode.kcb.entity.Constituency;
+import com.deltacode.kcb.entity.County;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

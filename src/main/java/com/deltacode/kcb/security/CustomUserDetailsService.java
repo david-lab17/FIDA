@@ -40,4 +40,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     }
 }
-
+//@Override
+//public Collection<? extends GrantedAuthority> getAuthorities() {
+//    Set<Role> roles = user.getRoles();
+//    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//
+//    for (Role role : roles) {
+//        authorities.add(new SimpleGrantedAuthority(role.getName()));
+//    }
+//
+//    return authorities;
+//}

@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,19 +24,17 @@ import java.util.Set;
 )
 public class Constituency {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String constituencyName;
-    private String  constituencyCode;
     private String description;
     private Boolean status=true;
+    private String constituencyCode;
     @CreationTimestamp
     private LocalDateTime createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_id",nullable = false)
     private County county;
     @OneToMany(mappedBy = "constituency",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<Ward> wards =new HashSet<>();
+    private Collection<Ward> wards =new HashSet<>();
 }

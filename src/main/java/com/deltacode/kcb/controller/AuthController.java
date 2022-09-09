@@ -77,7 +77,6 @@ public class AuthController {
         userApp.setMiddleName(signUpDto.getMiddleName());
         userApp.setPhoneNumber(signUpDto.getPhoneNumber());
 
-
         Role userRole = roleRepository.findByName("ROLE_ADMIN").get();
         userApp.setRoles(Collections.singleton(userRole));
         userRepository.save(userApp);

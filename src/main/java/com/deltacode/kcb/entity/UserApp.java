@@ -1,5 +1,6 @@
 package com.deltacode.kcb.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,8 +26,8 @@ public class UserApp {
     private String lastName;
     private String phoneNumber;
     private String middleName;
-    @DateTimeFormat(pattern="dd/MM/yyyy")
-    private LocalDateTime dateOfBirth;
+    @Column(name="dob")
+    private Date dateOfBirth;
     @CreationTimestamp
     private LocalDateTime createdDate;
     @Column(name = "reset_password_token")

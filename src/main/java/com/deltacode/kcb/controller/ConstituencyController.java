@@ -28,8 +28,8 @@ public class ConstituencyController {
     @ApiOperation(value = "Create Constituency Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ConstituencyDto> createCounty(@Valid @RequestBody ConstituencyDto countyDto){
-        return  new ResponseEntity<>(constituencyService.createConstituency(countyDto), HttpStatus.CREATED);
+    public ResponseEntity<ConstituencyDto> createConstituency(@Valid @RequestBody ConstituencyDto constituencyDto){
+        return  new ResponseEntity<>(constituencyService.createConstituency(constituencyDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Fetching all Constituency  Api")
@@ -45,21 +45,21 @@ public class ConstituencyController {
 
     @ApiOperation(value = "Fetching  Constituency  Api by Id")
     @GetMapping("/{id}")
-    public ConstituencyDto getCountyById(@PathVariable Long id){
+    public ConstituencyDto getConstituencyById(@PathVariable Long id){
         return constituencyService.getConstituencyById(id);
     }
 
     @ApiOperation(value = "Update Constituency Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ConstituencyDto updateCounty(@Valid @RequestBody ConstituencyDto countyDto,@PathVariable Long id){
-        return constituencyService.updateConstituency(countyDto,id);
+    public ConstituencyDto updateConstituency(@Valid @RequestBody ConstituencyDto constituencyDto,@PathVariable Long id){
+        return constituencyService.updateConstituency(constituencyDto,id);
     }
 
     @ApiOperation(value = "Delete Constituency Api")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCounty(@PathVariable Long id){
+    public ResponseEntity<?> deleteConstituency(@PathVariable Long id){
         constituencyService.deleteConstituencyById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
