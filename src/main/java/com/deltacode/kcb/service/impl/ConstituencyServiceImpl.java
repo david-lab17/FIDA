@@ -1,88 +1,120 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.Constituency;
+import com.deltacode.kcb.entity.County;
+import com.deltacode.kcb.exception.FieldPortalApiException;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.ConstituencyDto;
-import com.deltacode.kcb.payload.ConstituencyResponse;
+import com.deltacode.kcb.payload.CountyDto;
 import com.deltacode.kcb.repository.ConstituencyRepository;
+import com.deltacode.kcb.repository.CountyRepository;
 import com.deltacode.kcb.service.ConstituencyService;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
+
 
 public class ConstituencyServiceImpl implements ConstituencyService {
     private final ConstituencyRepository constituencyRepository;
+    private final CountyRepository countyRepository;
     private final ModelMapper modelMapper;
 
-    public ConstituencyServiceImpl(ConstituencyRepository constituencyRepository,
-                                   ModelMapper modelMapper) {
+    public ConstituencyServiceImpl(ConstituencyRepository constituencyRepository, CountyRepository countyRepository, ModelMapper modelMapper) {
         this.constituencyRepository = constituencyRepository;
+        this.countyRepository = countyRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public ConstituencyDto createConstituency(ConstituencyDto constituencyDto) {
-        Constituency constituency = mapToEntity(constituencyDto);
-        Constituency newConstituency = constituencyRepository.save(constituency);
+    public ConstituencyDto createConstituency(long countyId, ConstituencyDto constituencyDto) {
+        Constituency constituency =mapToEntity(constituencyDto);
+        //set county to constituency
+        // retrieve county entity by id
+        County county = countyRepository.findById(countyId).orElseThrow(
+                () -> new ResourceNotFoundException("County", "id", countyId));
+
+        // set county to constituency entity
+        constituency.setCounty(county);
+
+        // constituency entity to DB
+        Constituency newConstituency =  constituencyRepository.save(constituency);
+
         return mapToDto(newConstituency);
     }
 
     @Override
-    public ConstituencyResponse getAllConstituencies(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        //create a pageable instance
-        Page<Constituency> constituencies = constituencyRepository.findAll(pageable);
-        //get content for page object
-        List<Constituency> listOfConstituency = constituencies.getContent();
-        List<ConstituencyDto> content = listOfConstituency.stream().map(this::mapToDto).toList();
-        ConstituencyResponse constituencyResponse = new ConstituencyResponse();
-        constituencyResponse.setContent(content);
-        constituencyResponse.setPageNo(constituencies.getNumber());
-        constituencyResponse.setPageSize(constituencies.getSize());
-        constituencyResponse.setTotalElements(constituencies.getNumberOfElements());
-        constituencyResponse.setTotalPages(constituencies.getTotalPages());
-        constituencyResponse.setLast(constituencies.isLast());
-        return constituencyResponse;
+    public List<ConstituencyDto> getConstituencyByCountyId(long countyId) {
+        // retrieve constituency by countyId
+        List<Constituency> constituencies = constituencyRepository.findByCountyId(countyId);
+
+        // convert list of comment entities to list of comment dto's
+        return constituencies.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public ConstituencyDto getConstituencyById(Long id) {
-        //check if constituency exists
-        Constituency constituency = constituencyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Constituency", "id", id));
+    public ConstituencyDto getConstituencyById(Long countyId, Long constituencyId) {
+        // retrieve county entity by id
+        County county = countyRepository.findById(countyId).orElseThrow(
+                () -> new ResourceNotFoundException("County", "id", countyId));
+
+        // retrieve constituency by id
+        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(() ->
+                new ResourceNotFoundException("Constituency", "id", constituencyId));
+
+        if(!constituency.getCounty().getId().equals(county.getId())){
+            throw new FieldPortalApiException(HttpStatus.BAD_REQUEST, "Constituency does not belong to a county");
+        }
+
         return mapToDto(constituency);
     }
 
     @Override
-    public ConstituencyDto updateConstituency(ConstituencyDto constituencyDto, Long id) {
-        //check if constituency exists
-        Constituency constituency = constituencyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Constituency", "id", id));
+    public ConstituencyDto updateConstituency(Long countyId, long constituencyId, ConstituencyDto constituencyDto) {
+        // retrieve county entity by id
+        County county = countyRepository.findById(countyId).orElseThrow(
+                () -> new ResourceNotFoundException("County", "id", countyId));
+        //retrieve constituency by id
+        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(() ->
+                new ResourceNotFoundException("Constituency", "id", constituencyId));
+        if (!constituency.getCounty().getId().equals(county.getId())) {
+            throw new FieldPortalApiException(HttpStatus.BAD_REQUEST, "Constituency does not belong to a county");
+        }
         constituency.setConstituencyName(constituencyDto.getConstituencyName());
         constituency.setConstituencyCode(constituencyDto.getConstituencyCode());
         constituency.setDescription(constituencyDto.getDescription());
-        constituencyRepository.save(constituency);
-        return mapToDto(constituency);
+        Constituency updatedConstituency = constituencyRepository.save(constituency);
+        return mapToDto(updatedConstituency);
     }
 
     @Override
-    public void deleteConstituencyById(Long id) {
-        //check if constituency exists
-        constituencyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Constituency", "id", id));
-        constituencyRepository.deleteById(id);
+    public void deleteConstituency(Long countyId, Long constituencyId) {
+        // retrieve county entity by id
+        County county = countyRepository.findById(countyId).orElseThrow(
+                () -> new ResourceNotFoundException("County", "id", countyId));
+        //retrieve constituency by id
+        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(() ->
+                new ResourceNotFoundException("Constituency", "id", constituencyId));
+        if (!constituency.getCounty().getId().equals(county.getId())) {
+            throw new FieldPortalApiException(HttpStatus.BAD_REQUEST, "Constituency does not belong to a county");
+        }
+        constituencyRepository.delete(constituency);
 
     }
+
     //convert entity to dto
-    private ConstituencyDto mapToDto(Constituency constituency){
-    return modelMapper.map(constituency, ConstituencyDto.class);
+    private ConstituencyDto mapToDto(Constituency constituency) {
+
+        return modelMapper.map(constituency, ConstituencyDto .class);
     }
     //convert dto to entity
-    private Constituency mapToEntity(ConstituencyDto constituencyDto){
-    return modelMapper.map(constituencyDto, Constituency.class);
+    private Constituency mapToEntity(ConstituencyDto constituencyDto) {
+
+        return modelMapper.map(constituencyDto, Constituency.class);
+
     }
 }

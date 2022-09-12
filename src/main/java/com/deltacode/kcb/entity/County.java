@@ -20,9 +20,11 @@ public class County {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String countyName;
     private String countyCode;
     private String description;
+    @Column(nullable = false)
     private Boolean status=true;
     @CreationTimestamp
     private LocalDateTime createdDate;

@@ -1,7 +1,6 @@
 package com.deltacode.kcb.controller;
 
 import com.deltacode.kcb.payload.ConstituencyDto;
-import com.deltacode.kcb.payload.ConstituencyResponse;
 import com.deltacode.kcb.service.ConstituencyService;
 import com.deltacode.kcb.utils.AppConstants;
 import io.swagger.annotations.Api;
@@ -12,12 +11,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @Api(value = "Constituency Controller Rest Api")
 @RestController()
 
-@RequestMapping(path = "/config/constituency")
+@RequestMapping(path = "/api/v1")
 public class ConstituencyController {
     private final ConstituencyService constituencyService;
 
@@ -25,42 +25,42 @@ public class ConstituencyController {
         this.constituencyService = constituencyService;
     }
 
-    @ApiOperation(value = "Create Constituency Api")
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<ConstituencyDto> createConstituency(@Valid @RequestBody ConstituencyDto constituencyDto){
-        return  new ResponseEntity<>(constituencyService.createConstituency(constituencyDto), HttpStatus.CREATED);
+
+    @ApiOperation(value = "Create Constituency REST API")
+    @PostMapping("/counties/{countyId}/constituency")
+    public ResponseEntity<ConstituencyDto> createConstituency(@PathVariable(value = "countyId") long countyId,
+                                                    @Valid @RequestBody ConstituencyDto constituencyDto) {
+        return new ResponseEntity<>(constituencyService.createConstituency(countyId, constituencyDto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Fetching all Constituency  Api")
-    @GetMapping
-    public ConstituencyResponse getAllConstituency(
-            @RequestParam(value = "pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
-            @RequestParam(value ="pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
-            @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
-            @RequestParam(value = "sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
-    ){
-        return constituencyService.getAllConstituencies(pageNo,pageSize,sortBy,sortDir);
+    @ApiOperation(value = "Get All Constituency By County ID REST API")
+    @GetMapping("/counties/{countyId}/constituency")
+    public List<ConstituencyDto> getConstituencyByCountyId(@PathVariable(value = "countyId") Long countyId) {
+        return constituencyService.getConstituencyByCountyId(countyId);
     }
 
-    @ApiOperation(value = "Fetching  Constituency  Api by Id")
-    @GetMapping("/{id}")
-    public ConstituencyDto getConstituencyById(@PathVariable Long id){
-        return constituencyService.getConstituencyById(id);
+    @ApiOperation(value = "Get Single Constituency By ID REST API")
+    @GetMapping("/counties/{countyId}/constituency/{id}")
+    public ResponseEntity<ConstituencyDto> getConstituencyById(@PathVariable(value = "countyId") Long countyId,
+                                                     @PathVariable(value = "id") Long commentId){
+        ConstituencyDto constituencyDto = constituencyService.getConstituencyById(countyId, commentId);
+        return new ResponseEntity<>(constituencyDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Update Constituency Api")
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    public ConstituencyDto updateConstituency(@Valid @RequestBody ConstituencyDto constituencyDto,@PathVariable Long id){
-        return constituencyService.updateConstituency(constituencyDto,id);
+    @ApiOperation(value = "Update Constituency By ID REST API")
+    @PutMapping("/counties/{countyId}/constituency/{id}")
+    public ResponseEntity<ConstituencyDto> updateConstituency(@PathVariable(value = "countyId") Long countyId,
+                                                    @PathVariable(value = "id") Long constituencyId,
+                                                    @Valid @RequestBody ConstituencyDto constituencyDto){
+        ConstituencyDto updatedConstituency = constituencyService.updateConstituency(countyId, constituencyId, constituencyDto);
+        return new ResponseEntity<>(updatedConstituency, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete Constituency Api")
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteConstituency(@PathVariable Long id){
-        constituencyService.deleteConstituencyById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @ApiOperation(value = "Delete Constituency By ID REST API")
+    @DeleteMapping("/counties/{countyId}/constituency/{id}")
+    public ResponseEntity<String> deleteConstituency(@PathVariable(value = "countyId") Long countyId,
+                                                @PathVariable(value = "id") Long constituencyId){
+        constituencyService.deleteConstituency(countyId, constituencyId);
+        return new ResponseEntity<>("Constituency deleted successfully", HttpStatus.OK);
     }
 }
