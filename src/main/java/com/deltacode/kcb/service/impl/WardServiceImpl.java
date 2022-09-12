@@ -1,83 +1,105 @@
 package com.deltacode.kcb.service.impl;
 
-import com.deltacode.kcb.entity.Team;
+import com.deltacode.kcb.entity.Constituency;
+import com.deltacode.kcb.entity.County;
 import com.deltacode.kcb.entity.Ward;
+import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.WardDto;
-import com.deltacode.kcb.payload.WardResponse;
+import com.deltacode.kcb.repository.ConstituencyRepository;
 import com.deltacode.kcb.repository.WardRepository;
 import com.deltacode.kcb.service.WardService;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 
 public class WardServiceImpl implements WardService {
     private final WardRepository wardRepository;
     private  final ModelMapper modelMapper;
+    private final ConstituencyRepository constituencyRepository;
 
-    public WardServiceImpl(WardRepository wardRepository, ModelMapper modelMapper) {
+    public WardServiceImpl(WardRepository wardRepository, ModelMapper modelMapper, ConstituencyRepository constituencyRepository) {
         this.wardRepository = wardRepository;
         this.modelMapper = modelMapper;
+        this.constituencyRepository = constituencyRepository;
+    }
+
+
+    @Override
+    public WardDto createWard(long constituencyId, WardDto wardDto) {
+        Ward ward =mapToEntity(wardDto);
+        //set constituency to ward
+        // retrieve constituency entity by id
+        Constituency constituency = constituencyRepository.findById(constituencyId).orElseThrow(
+                () -> new ResourceNotFoundException("Constituency", "id", constituencyId));
+
+        // set constituency to ward entity
+        ward.setConstituency(constituency);
+        // ward entity to DB
+        Ward newWard =  wardRepository.save(ward);
+        return mapToDto(newWard);
     }
 
     @Override
-    public WardDto createWard(WardDto wardDto) {
-        Ward ward = modelMapper.map(wardDto, Ward.class);
-        wardRepository.save(ward);
-        return modelMapper.map(ward, WardDto.class);
+    public List<WardDto> getWardByConstituencyId(long constituencyId) {
+        // retrieve ward by constituencyId
+        List<Ward> wards = wardRepository.findByConstituencyId(constituencyId);
+        // convert list of ward entities to list of ward dto's
+        return wards.stream().map(this::mapToDto).collect(Collectors.toList());
+
     }
 
     @Override
-    public WardResponse getAllWards(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        //create a pageable instance
-        Page<Ward> ward = wardRepository.findAll(pageable);
-        //get content for page object
-        List<Ward> listOfWards = ward.getContent();
-        List<WardDto> content = listOfWards.stream().map(this::mapToDto).toList();
-        WardResponse wardResponse = new WardResponse();
-        wardResponse.setContent(content);
-        wardResponse.setPageNo(ward.getNumber());
-        wardResponse.setPageSize(ward.getSize());
-        wardResponse.setTotalElements(ward.getNumberOfElements());
-        wardResponse.setTotalPages(ward.getTotalPages());
-        wardResponse.setLast(ward.isLast());
-        return wardResponse;
+    public WardDto getWardById(Long constituencyId, Long wardId) {
+        // retrieve constituency by id
+        Constituency constituency =constituencyRepository.findById(constituencyId).orElseThrow(
+                () -> new ResourceNotFoundException("Constituency", "id", constituencyId));
+        // retrieve ward by id
+        Ward ward = wardRepository.findById(wardId).orElseThrow(
+                () -> new ResourceNotFoundException("Ward", "id", wardId));
+        // check if ward belongs to constituency
+        if(!ward.getConstituency().equals(constituency)){
+            throw new ResourceNotFoundException("Ward", "id", wardId);
+        }
+        return mapToDto(ward);
+
     }
 
     @Override
-    public WardDto getWardById(Long id) {
-        Ward ward = wardRepository.findById(id).orElseThrow(() -> new RuntimeException("Ward not found"));
-        return modelMapper.map(ward, WardDto.class);
-    }
-
-    @Override
-    public WardDto updateWard(WardDto wardDto, Long id) {
-        Ward ward = wardRepository.findById(id).orElseThrow(() -> new RuntimeException("Ward not found"));
+    public WardDto updateWard(Long constituencyId, long wardId, WardDto wardDto) {
+        Constituency constituency =constituencyRepository.findById(constituencyId).orElseThrow(
+                () -> new ResourceNotFoundException("Constituency", "id", constituencyId));
+        Ward ward = wardRepository.findById(wardId).orElseThrow(
+                () -> new ResourceNotFoundException("Ward", "id", wardId));
+        if(!ward.getConstituency().equals(constituency)){
+            throw new ResourceNotFoundException("Ward", "id", wardId);
+        }
         ward.setWardName(wardDto.getWardName());
         ward.setWardCode(wardDto.getWardCode());
         ward.setDescription(wardDto.getDescription());
-        wardRepository.save(ward);
-        return modelMapper.map(ward, WardDto.class);
+        Ward updatedWard = wardRepository.save(ward);
+        return mapToDto(updatedWard);
     }
 
     @Override
-    public void deleteWardById(Long id) {
-        //check if ward exists
-        wardRepository.findById(id).orElseThrow(() -> new RuntimeException("Ward not found"));
-        wardRepository.deleteById(id);
+    public void deleteWard(Long constituencyId, Long wardId) {
+        Constituency constituency =constituencyRepository.findById(constituencyId).orElseThrow(
+                () -> new ResourceNotFoundException("Constituency", "id", constituencyId));
+        Ward ward = wardRepository.findById(wardId).orElseThrow(
+                () -> new ResourceNotFoundException("Ward", "id", wardId));
+        if(!ward.getConstituency().equals(constituency)){
+            throw new ResourceNotFoundException("Ward", "id", wardId);
+        }
+        wardRepository.delete(ward);
 
     }
     //convert entity to dto
-    private WardDto mapToDto(Ward team) {
+    private WardDto mapToDto(Ward ward) {
 
-        return modelMapper.map(team, WardDto .class);
+        return modelMapper.map(ward, WardDto .class);
 
     }
     //convert dto to entity
@@ -86,5 +108,4 @@ public class WardServiceImpl implements WardService {
         return modelMapper.map(wardDto, Ward.class);
 
     }
-
 }

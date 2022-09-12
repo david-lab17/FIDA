@@ -52,7 +52,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
         // retrieve constituency by countyId
         List<Constituency> constituencies = constituencyRepository.findByCountyId(countyId);
 
-        // convert list of comment entities to list of comment dto's
+        // convert list of constituency entities to list of constituency dto's
         return constituencies.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
