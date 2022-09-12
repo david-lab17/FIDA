@@ -25,7 +25,7 @@ public class CountyDto {
     private String description;
     @ApiModelProperty(value = "County status")
     private boolean status=true;
-    private Set<CountyDto> constituency;
+    private Set<ConstituencyDto> constituency;
 
 
 }

@@ -16,8 +16,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "zone_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"zoneName"}),
-        @UniqueConstraint(columnNames = {"zoneCode"})})
+@Table(name = "team_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"teamName"}),
+        @UniqueConstraint(columnNames = {"teamCode"})})
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +35,6 @@ public class Team {
 
     @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
     private Set<DSR> dsr;
+
 }
 
