@@ -32,7 +32,7 @@ public class DSRDto {
     @ApiModelProperty(value = "Phone number", required = true)
     private String phoneNumber;
     @ApiModelProperty(value = "Id Number", required = true)
-    private String idNumber;
+    private Integer idNumber;
     @ApiModelProperty(value = "Role", required = true)
     private Boolean gender;
     @ApiModelProperty(value = "Role", required = true)

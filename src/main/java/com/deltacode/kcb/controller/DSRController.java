@@ -1,7 +1,7 @@
 package com.deltacode.kcb.controller;
 
 import com.deltacode.kcb.payload.DSRDto;
-import com.deltacode.kcb.payload.DSRResponse;
+import com.deltacode.kcb.payload.WardDto;
 import com.deltacode.kcb.service.DSRService;
 import com.deltacode.kcb.utils.AppConstants;
 import io.swagger.annotations.Api;
@@ -12,12 +12,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
-@Api(value = "Direct Sale Representative Controller Rest Api")
+@Api(value = "DSR Rest Api")
 @RestController()
 
-@RequestMapping(path = "/dsr-teams/dsr")
+@RequestMapping(path = "/api/v1")
 public class DSRController {
     private final DSRService dsrService;
 
@@ -26,42 +27,41 @@ public class DSRController {
     }
 
     //create DSR
-    @ApiOperation(value = "Create DSR Api")
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<DSRDto> createDSR(@Valid @RequestBody DSRDto dsrDto){
-        return  new ResponseEntity<>(dsrService.createDSR(dsrDto), HttpStatus.CREATED);
+    @ApiOperation(value = "Create Dsr REST API")
+    @PostMapping("/teams/{teamId}/dsr")
+    public ResponseEntity<DSRDto> createDsr(@PathVariable(value = "teamId") long teamId,
+                                              @Valid @RequestBody DSRDto dsrDto) {
+        return new ResponseEntity<>(dsrService.createDSR(teamId, dsrDto), HttpStatus.CREATED);
     }
-    //get All banks
-    @ApiOperation(value = "Fetching all DSR  Api")
-    @GetMapping
-    public DSRResponse getAllDSR(
-            @RequestParam(value = "pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
-            @RequestParam(value ="pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
-            @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
-            @RequestParam(value = "sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
-    ){
-        return dsrService.getAllDSR(pageNo,pageSize,sortBy,sortDir);
+
+    @ApiOperation(value = "Get All Dsr By Team ID REST API")
+    @GetMapping("/teams/{teamId}/dsr")
+    public List<DSRDto> getDsrByTeamId(@PathVariable(value = "teamId") Long teamId) {
+        return dsrService.getDSRByTeamId(teamId);
     }
-    //get bank by id
-    @ApiOperation(value = "Fetching  DSR  Api by Id")
-    @GetMapping("/{id}")
-    public DSRDto getDSRById(@PathVariable Long id){
-        return dsrService.getDSRById(id);
+
+    @ApiOperation(value = "Get Single DSR By ID REST API")
+    @GetMapping("/teams/{teamId}/dsr/{id}")
+    public ResponseEntity<DSRDto> getDsrById(@PathVariable(value = "teamId") Long teamId,
+                                               @PathVariable(value = "id") Long dsrId){
+        DSRDto dsrDto = dsrService.getDSRById(teamId, dsrId);
+        return new ResponseEntity<>(dsrDto, HttpStatus.OK);
     }
-    //update bank
-    @ApiOperation(value = "Update DSR Api")
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    public DSRDto updateDSR(@Valid @RequestBody DSRDto dsrDto,@PathVariable Long id){
-        return dsrService.updateDSR(dsrDto,id);
+
+    @ApiOperation(value = "Update DSR By ID REST API")
+    @PutMapping("/teams/{teamId}/dsr/{id}")
+    public ResponseEntity<DSRDto> updateDsr(@PathVariable(value = "teamId") Long teamId,
+                                              @PathVariable(value = "id") Long dsrId,
+                                              @Valid @RequestBody DSRDto dsrDto){
+        DSRDto updatedDsr = dsrService.updateDSR(teamId, dsrId, dsrDto);
+        return new ResponseEntity<>(updatedDsr, HttpStatus.OK);
     }
-    //delete bank
-    @ApiOperation(value = "Delete DSR Api")
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBank(@PathVariable Long id){
-        dsrService.deleteDSRById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+    @ApiOperation(value = "Delete DSR By ID REST API")
+    @DeleteMapping("/teams/{teamId}/dsr/{id}")
+    public ResponseEntity<String> deleteDsr(@PathVariable(value = "teamId") Long teamId,
+                                             @PathVariable(value = "id") Long dsrId){
+        dsrService.deleteDSR(teamId, dsrId);
+        return new ResponseEntity<>("DSR deleted successfully", HttpStatus.OK);
     }
 }

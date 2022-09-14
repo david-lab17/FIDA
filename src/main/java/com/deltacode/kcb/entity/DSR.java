@@ -26,6 +26,7 @@ public class DSR {
     private String lastName;
     private String phoneNumber;
     private String middleName;
+    private String dateOfBirth;
     private Boolean status=true;
     private Boolean gender;
     @CreationTimestamp

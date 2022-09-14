@@ -15,7 +15,7 @@ import java.util.List;
 @Api(value = "Ward Controller Rest Api")
 @RestController()
 
-@RequestMapping(path = "/config/ward")
+@RequestMapping(path = "/api/v1")
 public class WardController {
     private final WardService wardService;
 
@@ -32,8 +32,8 @@ public class WardController {
 
     @ApiOperation(value = "Get All Ward By Constituency ID REST API")
     @GetMapping("/constituencies/{constituencyId}/ward")
-    public List<WardDto> getWardByConstituencyId(@PathVariable(value = "countyId") Long countyId) {
-        return wardService.getWardByConstituencyId(countyId);
+    public List<WardDto> getWardByConstituencyId(@PathVariable(value = "constituencyId") Long constituencyId) {
+        return wardService.getWardByConstituencyId(constituencyId);
     }
 
     @ApiOperation(value = "Get Single Ward By ID REST API")
