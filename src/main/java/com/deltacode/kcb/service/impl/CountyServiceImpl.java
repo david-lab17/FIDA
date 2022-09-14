@@ -27,9 +27,10 @@ public class CountyServiceImpl implements CountyService {
 
     @Override
     public CountyDto createCounty(CountyDto countyDto) {
-        County county = modelMapper.map(countyDto, County.class);
-        countyRepository.save(county);
-        return modelMapper.map(county, CountyDto.class);
+        County county =mapToEntity(countyDto);
+        County newCounty =  countyRepository.save(county);
+        return mapToDto(newCounty);
+
 
     }
 
