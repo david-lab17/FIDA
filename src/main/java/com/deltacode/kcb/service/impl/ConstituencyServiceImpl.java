@@ -33,7 +33,6 @@ public class ConstituencyServiceImpl implements ConstituencyService {
     @Override
     public ConstituencyDto createConstituency(long countyId, ConstituencyDto constituencyDto) {
         Constituency constituency =mapToEntity(constituencyDto);
-        //set county to constituency
         // retrieve county entity by id
         County county = countyRepository.findById(countyId).orElseThrow(
                 () -> new ResourceNotFoundException("County", "id", countyId));
