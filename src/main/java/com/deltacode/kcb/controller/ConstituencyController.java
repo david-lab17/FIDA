@@ -42,8 +42,8 @@ public class ConstituencyController {
     @ApiOperation(value = "Get Single Constituency By ID REST API")
     @GetMapping("/counties/{countyId}/constituency/{id}")
     public ResponseEntity<ConstituencyDto> getConstituencyById(@PathVariable(value = "countyId") Long countyId,
-                                                     @PathVariable(value = "id") Long commentId){
-        ConstituencyDto constituencyDto = constituencyService.getConstituencyById(countyId, commentId);
+                                                     @PathVariable(value = "id") Long constituencyId){
+        ConstituencyDto constituencyDto = constituencyService.getConstituencyById(countyId, constituencyId);
         return new ResponseEntity<>(constituencyDto, HttpStatus.OK);
     }
 
