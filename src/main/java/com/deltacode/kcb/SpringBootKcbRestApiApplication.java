@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class SpringBootKcbRestApiApplication   {
+public class SpringBootKcbRestApiApplication implements CommandLineRunner  {
 
 
 	@Bean
@@ -25,18 +25,18 @@ public class SpringBootKcbRestApiApplication   {
 
 	}
 
-// @Autowired
-//	private  RoleRepository roleRepository;
-//	@Override
-//	public void run(String... args) throws Exception {
-//		Role adminRole=new Role();
-//		adminRole.setName("ROLE_ADMIN");
-//		roleRepository.save(adminRole);
-//
-//		Role userRole=new Role();
-//		userRole.setName("ROLE_USER");
-//		roleRepository.save(userRole);
-//
-//	}
+ @Autowired
+	private  RoleRepository roleRepository;
+	@Override
+	public void run(String... args) throws Exception {
+		Role adminRole=new Role();
+		adminRole.setName("ROLE_ADMIN");
+		roleRepository.save(adminRole);
+
+		Role userRole=new Role();
+		userRole.setName("ROLE_USER");
+		roleRepository.save(userRole);
+
+	}
 }
 
