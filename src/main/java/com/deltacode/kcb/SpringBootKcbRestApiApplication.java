@@ -11,7 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class SpringBootKcbRestApiApplication implements CommandLineRunner  {
+public class SpringBootKcbRestApiApplication implements CommandLineRunner   {
 	public SpringBootKcbRestApiApplication(RoleRepository roleRepository) {
 		this.roleRepository = roleRepository;
 	}
