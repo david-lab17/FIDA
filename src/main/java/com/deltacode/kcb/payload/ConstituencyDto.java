@@ -27,6 +27,7 @@ public class ConstituencyDto {
     private String description;
     @ApiModelProperty(value = "Constituency status")
     private boolean status=true;
+    private Long countyId;
     private Set<WardDto> ward;
 
 
