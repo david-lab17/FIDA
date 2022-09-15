@@ -1,6 +1,8 @@
 package com.deltacode.kcb.controller;
 
+import com.deltacode.kcb.payload.BusinessTypeResponse;
 import com.deltacode.kcb.payload.ConstituencyDto;
+import com.deltacode.kcb.payload.ConstituencyResponse;
 import com.deltacode.kcb.service.ConstituencyService;
 import com.deltacode.kcb.utils.AppConstants;
 import io.swagger.annotations.Api;
@@ -31,6 +33,16 @@ public class ConstituencyController {
     public ResponseEntity<ConstituencyDto> createConstituency(@PathVariable(value = "countyId") long countyId,
                                                     @Valid @RequestBody ConstituencyDto constituencyDto) {
         return new ResponseEntity<>(constituencyService.createConstituency(countyId, constituencyDto), HttpStatus.CREATED);
+    }
+    @ApiOperation(value = "Fetching all Constituency   Api")
+    @GetMapping("/constituencies")
+    public ConstituencyResponse getAllConstituency(
+            @RequestParam(value = "pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
+            @RequestParam(value ="pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
+    ){
+        return constituencyService.getAllConstituency(pageNo,pageSize,sortBy,sortDir);
     }
 
     @ApiOperation(value = "Get All Constituency By County ID REST API")

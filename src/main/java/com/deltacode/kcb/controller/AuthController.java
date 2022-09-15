@@ -77,7 +77,7 @@ public class AuthController {
         userApp.setMiddleName(signUpDto.getMiddleName());
         userApp.setPhoneNumber(signUpDto.getPhoneNumber());
 
-        Role userRole = roleRepository.findByName("ROLE_ADMIN").get();
+        Role userRole = roleRepository.findByName("ROLE_USER").get();
         userApp.setRoles(Collections.singleton(userRole));
         userRepository.save(userApp);
         return ResponseEntity.ok("User registered successfully");

@@ -38,4 +38,10 @@ public class UserService {
         userApp.setResetPasswordToken(null);
         userRepository.save(userApp);
     }
+    public UserApp findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("UseApp","id", + id));
+    }
+
+
+
 }

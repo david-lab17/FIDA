@@ -1,15 +1,19 @@
 package com.deltacode.kcb.service.impl;
 
+import com.deltacode.kcb.entity.ComplaintType;
 import com.deltacode.kcb.entity.Constituency;
 import com.deltacode.kcb.entity.County;
 import com.deltacode.kcb.exception.FieldPortalApiException;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
-import com.deltacode.kcb.payload.ConstituencyDto;
-import com.deltacode.kcb.payload.CountyDto;
+import com.deltacode.kcb.payload.*;
 import com.deltacode.kcb.repository.ConstituencyRepository;
 import com.deltacode.kcb.repository.CountyRepository;
 import com.deltacode.kcb.service.ConstituencyService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +57,25 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
         // convert list of constituency entities to list of constituency dto's
         return constituencies.stream().map(this::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public ConstituencyResponse getAllConstituency(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
+        //create a pageable instance
+        Page<Constituency> constituency=constituencyRepository.findAll(pageable);
+        //get content for page object
+        List<Constituency> constituencyList=constituency.getContent();
+        List<ConstituencyDto> content=constituencyList.stream().map(this::mapToDto).toList();
+        ConstituencyResponse constituencyResponse=new ConstituencyResponse();
+        constituencyResponse.setContent(content);
+        constituencyResponse.setPageNo(constituency.getNumber());
+        constituencyResponse.setPageSize(constituency.getSize());
+        constituencyResponse.setTotalElements((int) constituency.getTotalElements());
+        constituencyResponse.setTotalPages(constituency.getTotalPages());
+        constituencyResponse.setLast(constituency.isLast());
+        return constituencyResponse;
     }
 
     @Override
