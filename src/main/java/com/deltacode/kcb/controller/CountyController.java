@@ -19,7 +19,7 @@ import javax.validation.Valid;
 @Api(value = "County Controller Rest Api")
 @RestController()
 
-@RequestMapping(path = "/api/v1")
+@RequestMapping(path = "county/api/v1")
 public class CountyController {
     private final CountyService countyService;
 
