@@ -25,6 +25,7 @@ public class WardDto {
     private String description;
     @ApiModelProperty(value = "Ward status")
     private boolean status=true;
+    private Long constituencyId;
 
 
 }

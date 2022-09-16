@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Api(value = "Upload User  Rest Api")
 @CrossOrigin("*")
 @Controller
@@ -44,18 +46,18 @@ public class ExcelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
     }
 
-//    @GetMapping("/users")
-//    public ResponseEntity<List<UserApp>> getAllUsers() {
-//        try {
-//            List<UserApp> userApps = excelService.getAllUsers();
-//
-//            if (userApps.isEmpty()) {
-//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//            }
-//
-//            return new ResponseEntity<>(userApps, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @GetMapping("/users")
+    public ResponseEntity<List<UserApp>> getAllUsers() {
+        try {
+            List<UserApp> userApps = excelService.getAllUsers();
+
+            if (userApps.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(userApps, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

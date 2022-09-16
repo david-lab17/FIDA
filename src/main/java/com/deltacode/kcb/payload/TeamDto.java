@@ -34,6 +34,7 @@ public class TeamDto {
     @Size(min = 10, message = "Description Name must have at least 2 characters")
     @ApiModelProperty(value = " Team Description")
     private String description;
+    private Long zoneId;
     private Set<DSRDto> dsr;
 
 }

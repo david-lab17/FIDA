@@ -37,5 +37,6 @@ public class DSRDto {
     private Boolean gender;
     @ApiModelProperty(value = "Role", required = true)
     private Boolean status;
+    private Long teamId;
 
 }

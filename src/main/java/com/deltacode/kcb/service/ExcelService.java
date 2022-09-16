@@ -24,7 +24,7 @@ public class ExcelService {
         }
     }
 
-//    public List<UserApp> getAllUsers() {
-//        return userRepository.findAll();
-//    }
+    public List<UserApp> getAllUsers() {
+        return userRepository.findAll();
+    }
 }

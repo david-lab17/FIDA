@@ -1,37 +1,52 @@
 package com.deltacode.kcb.helper;
 
+import com.deltacode.kcb.entity.Role;
 import com.deltacode.kcb.entity.UserApp;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import com.deltacode.kcb.repository.RoleRepository;
+import com.deltacode.kcb.repository.UserRepository;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ExcelHelper {
+    @Autowired
+     static RoleRepository roleRepository;
+    @Autowired
+      static UserRepository userRepository;
+
     public static final String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] HEADERs = { "username","password","email","firstName","lastName","phoneNumber","middleName","dateOfBirth" };
+    static String[] HEADERs = { "firstName","middleName","lastName","email","dateOfBirth","phoneNumber","password","username" };
     static String SHEET = "Users";
+
+
+
+
+
+
     public static boolean hasExcelFormat(MultipartFile file) {
 
         return TYPE.equals(file.getContentType());
     }
 
     public static List<UserApp> excelToUsers(InputStream is) {
+
+
+
         try {
             Workbook workbook = new XSSFWorkbook(is);
 
             Sheet sheet = workbook.getSheet(SHEET);
             Iterator<Row> rows = sheet.iterator();
 
-            List<UserApp> userApps = new ArrayList<UserApp>();
+            List<UserApp> userApps = new ArrayList<>();
 
             int rowNumber = 0;
             while (rows.hasNext()) {
@@ -67,8 +82,15 @@ public class ExcelHelper {
 
                     cellIdx++;
                 }
-
+                Optional<Role> role = roleRepository.findByName("ROLE_USER");
+                userApp.setRoles(new HashSet<>(Arrays.asList(role.get())));
                 userApps.add(userApp);
+//               userApps.add(userApp);
+
+//
+
+
+
             }
 
             workbook.close();
