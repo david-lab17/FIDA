@@ -4,6 +4,7 @@ import com.deltacode.kcb.entity.DSR;
 import com.deltacode.kcb.entity.Team;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.DSRDto;
+import com.deltacode.kcb.payload.DSRResponse;
 import com.deltacode.kcb.repository.DSRRepository;
 import com.deltacode.kcb.repository.TeamRepository;
 import com.deltacode.kcb.service.DSRService;
@@ -51,6 +52,25 @@ public class DSRServiceImpl implements DSRService {
         //convert list of dsr entities to list of dsr dto's
         return dsr.stream().map(this::mapToDto).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public DSRResponse getAllDSRs(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
+        //create a pageable instance
+        Page<DSR> dsr=dsrRepository.findAll(pageable);
+        //get content for page object
+        List<DSR> dsrList=dsr.getContent();
+        List<DSRDto> content=dsrList.stream().map(this::mapToDto).toList();
+        DSRResponse dsrResponse=new DSRResponse();
+        dsrResponse.setContent(content);
+        dsrResponse.setPageNo(dsr.getNumber());
+        dsrResponse.setPageSize(dsr.getSize());
+        dsrResponse.setTotalElements((int) dsr.getTotalElements());
+        dsrResponse.setTotalPages(dsr.getTotalPages());
+        dsrResponse.setLast(dsr.isLast());
+        return dsrResponse;
     }
 
     @Override

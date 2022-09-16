@@ -4,10 +4,15 @@ import com.deltacode.kcb.entity.Team;
 import com.deltacode.kcb.entity.Zone;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.TeamDto;
+import com.deltacode.kcb.payload.TeamResponse;
 import com.deltacode.kcb.repository.TeamRepository;
 import com.deltacode.kcb.repository.ZoneRepository;
 import com.deltacode.kcb.service.TeamService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +44,25 @@ public class TeamServiceImpl implements TeamService {
         Team newTeam = teamRepository.save(team);
         return mapToDto(newTeam);
 
+    }
+
+    @Override
+    public TeamResponse getAllTeams(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
+        //create a pageable instance
+        Page<Team> team=teamRepository.findAll(pageable);
+        //get content for page object
+        List<Team> teamList=team.getContent();
+        List<TeamDto> content=teamList.stream().map(this::mapToDto).toList();
+        TeamResponse teamResponse=new TeamResponse();
+        teamResponse.setContent(content);
+        teamResponse.setPageNo(team.getNumber());
+        teamResponse.setPageSize(team.getSize());
+        teamResponse.setTotalElements((int) team.getTotalElements());
+        teamResponse.setTotalPages(team.getTotalPages());
+        teamResponse.setLast(team.isLast());
+        return teamResponse;
     }
 
     @Override

@@ -1,7 +1,10 @@
 package com.deltacode.kcb.controller;
 
+import com.deltacode.kcb.payload.CountyResponse;
 import com.deltacode.kcb.payload.WardDto;
+import com.deltacode.kcb.payload.WardResponse;
 import com.deltacode.kcb.service.WardService;
+import com.deltacode.kcb.utils.AppConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,17 @@ public class WardController {
     public ResponseEntity<WardDto> createWard(@PathVariable(value = "constituencyId") long constituencyId,
                                                       @Valid @RequestBody WardDto wardDto) {
         return new ResponseEntity<>(wardService.createWard(constituencyId, wardDto), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Fetching all Wards  Api")
+    @GetMapping("/wards")
+    public WardResponse getAllWards(
+            @RequestParam(value = "pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
+            @RequestParam(value ="pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
+    ){
+        return wardService.getAllWards(pageNo,pageSize,sortBy,sortDir);
     }
 
     @ApiOperation(value = "Get All Ward By Constituency ID REST API")

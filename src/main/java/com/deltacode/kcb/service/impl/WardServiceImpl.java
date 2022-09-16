@@ -4,11 +4,18 @@ import com.deltacode.kcb.entity.Constituency;
 import com.deltacode.kcb.entity.County;
 import com.deltacode.kcb.entity.Ward;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
+import com.deltacode.kcb.payload.ConstituencyDto;
+import com.deltacode.kcb.payload.ConstituencyResponse;
 import com.deltacode.kcb.payload.WardDto;
+import com.deltacode.kcb.payload.WardResponse;
 import com.deltacode.kcb.repository.ConstituencyRepository;
 import com.deltacode.kcb.repository.WardRepository;
 import com.deltacode.kcb.service.WardService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +48,25 @@ public class WardServiceImpl implements WardService {
         // ward entity to DB
         Ward newWard =  wardRepository.save(ward);
         return mapToDto(newWard);
+    }
+
+    @Override
+    public WardResponse getAllWards(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
+        //create a pageable instance
+        Page<Ward> ward=wardRepository.findAll(pageable);
+        //get content for page object
+        List<Ward> WardList=ward.getContent();
+        List<WardDto> content=WardList.stream().map(this::mapToDto).toList();
+        WardResponse wardResponse=new WardResponse();
+        wardResponse.setContent(content);
+        wardResponse.setPageNo(ward.getNumber());
+        wardResponse.setPageSize(ward.getSize());
+        wardResponse.setTotalElements((int) ward.getTotalElements());
+        wardResponse.setTotalPages(ward.getTotalPages());
+        wardResponse.setLast(ward.isLast());
+        return wardResponse;
     }
 
     @Override

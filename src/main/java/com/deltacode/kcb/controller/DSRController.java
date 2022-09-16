@@ -1,14 +1,13 @@
 package com.deltacode.kcb.controller;
 
 import com.deltacode.kcb.payload.DSRDto;
-import com.deltacode.kcb.payload.WardDto;
+import com.deltacode.kcb.payload.DSRResponse;
 import com.deltacode.kcb.service.DSRService;
 import com.deltacode.kcb.utils.AppConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,6 +37,17 @@ public class DSRController {
     @GetMapping("/teams/{teamId}/dsr")
     public List<DSRDto> getDsrByTeamId(@PathVariable(value = "teamId") Long teamId) {
         return dsrService.getDSRByTeamId(teamId);
+    }
+
+    @ApiOperation(value = "Fetching all Dsr  Api")
+    @GetMapping("/dsr")
+    public DSRResponse getAllDSRs(
+            @RequestParam(value = "pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
+            @RequestParam(value ="pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
+    ){
+        return dsrService.getAllDSRs(pageNo,pageSize,sortBy,sortDir);
     }
 
     @ApiOperation(value = "Get Single DSR By ID REST API")

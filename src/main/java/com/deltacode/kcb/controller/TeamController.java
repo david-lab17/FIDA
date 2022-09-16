@@ -1,14 +1,13 @@
 package com.deltacode.kcb.controller;
 
-import com.deltacode.kcb.payload.ConstituencyDto;
 import com.deltacode.kcb.payload.TeamDto;
+import com.deltacode.kcb.payload.TeamResponse;
 import com.deltacode.kcb.service.TeamService;
 import com.deltacode.kcb.utils.AppConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,6 +37,17 @@ public class TeamController {
     @GetMapping("/zones/{zoneId}/team")
     public List<TeamDto> getTeamByZoneId(@PathVariable(value = "zoneId") Long zoneId) {
         return teamService.getTeamByZoneId(zoneId);
+    }
+
+    @ApiOperation(value = "Fetching all Teams  Api")
+    @GetMapping("/teams")
+    public TeamResponse getAllTeams(
+            @RequestParam(value = "pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
+            @RequestParam(value ="pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
+    ){
+        return teamService.getAllTeams(pageNo,pageSize,sortBy,sortDir);
     }
 
     @ApiOperation(value = "Get Single Team By ID REST API")
