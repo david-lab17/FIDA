@@ -28,7 +28,9 @@ public class ConstituencyServiceImpl implements ConstituencyService {
     private final CountyRepository countyRepository;
     private final ModelMapper modelMapper;
 
-    public ConstituencyServiceImpl(ConstituencyRepository constituencyRepository, CountyRepository countyRepository, ModelMapper modelMapper) {
+    public ConstituencyServiceImpl(ConstituencyRepository constituencyRepository,
+                                   CountyRepository countyRepository,
+                                   ModelMapper modelMapper) {
         this.constituencyRepository = constituencyRepository;
         this.countyRepository = countyRepository;
         this.modelMapper = modelMapper;
@@ -61,7 +63,13 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
     @Override
     public ConstituencyResponse getAllConstituency(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Sort sort=sortDir.equalsIgnoreCase(Sort
+                .Direction
+                .ASC
+                .name())?Sort.by(sortBy)
+                .ascending():Sort.
+                by(sortBy).
+                descending();
         Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
         Page<Constituency> constituency=constituencyRepository.findAll(pageable);

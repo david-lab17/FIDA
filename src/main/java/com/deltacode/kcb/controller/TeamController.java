@@ -28,7 +28,7 @@ public class TeamController {
     //create team
     @ApiOperation(value = "Create Team REST API")
     @PostMapping("/zones/{zoneId}/team")
-    public ResponseEntity<TeamDto> createTeam(@PathVariable(value = "countyId") long zoneId,
+    public ResponseEntity<TeamDto> createTeam(@PathVariable(value = "zoneId") long zoneId,
                                                               @Valid @RequestBody TeamDto teamDto) {
         return new ResponseEntity<>(teamService.createTeam(zoneId, teamDto), HttpStatus.CREATED);
     }

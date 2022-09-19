@@ -32,13 +32,14 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail));
         return new User(userApp.getUsername(), userApp.getPassword(), mapRolesToAuthorities(userApp.getRoles()));
     }
-    //map roles to authorities for spring security...
-    private Collection< ? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
-       return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
 
+    //map roles to authorities
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(  role.getName()))
+                .collect(Collectors.toList());
     }
+
 }
 //@Override
 //public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,3 +52,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 //
 //    return authorities;
 //}
+
+// private Collection< ? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {
+//       return roles.stream()
+//                .map(role -> new SimpleGrantedAuthority(role.getName()))
+//                .collect(Collectors.toList());
+//
+//    }
