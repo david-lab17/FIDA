@@ -20,8 +20,8 @@ import java.util.Set;
 @Entity
 @Table(name = "team_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"teamName"}),
         @UniqueConstraint(columnNames = {"teamCode"})})
-@SQLDelete(sql = "UPDATE team_tb SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE team_tb SET deleted = true WHERE id = ?")
+//@Where(clause = "deleted = false")
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +39,7 @@ public class Team {
 
     @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
     private Set<DSR> dsr;
-    private Boolean deleted = Boolean.FALSE;
+//    private Boolean deleted = Boolean.FALSE;
 
 }
 

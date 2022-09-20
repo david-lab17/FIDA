@@ -15,8 +15,8 @@ import java.util.Date;
 @Table(name = "dsr_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}),
         @UniqueConstraint(columnNames = {"idNumber"}),
         @UniqueConstraint(columnNames = {"email"})})
-@SQLDelete(sql = "UPDATE dsr_tb SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE dsr_tb SET deleted = true WHERE id = ?")
+//@Where(clause = "deleted = false")
 public class DSR {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +38,6 @@ public class DSR {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id",nullable = false)
     private Team team;
-    private Boolean deleted = Boolean.FALSE;
+//    private Boolean deleted = Boolean.FALSE;
 
 }

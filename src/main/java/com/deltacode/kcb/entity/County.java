@@ -19,8 +19,8 @@ import java.util.Set;
 
 @Table(name = "county_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"countyName"}),
         @UniqueConstraint(columnNames = {"countyCode"})})
-@SQLDelete(sql = "UPDATE county_tb SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE county_tb SET deleted = true WHERE id = ?")
+//@Where(clause = "deleted = false")
 public class County {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +35,5 @@ public class County {
     private LocalDateTime createdDate;
     @OneToMany(mappedBy = "county", cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Constituency> constituencies =new HashSet<>();
-    private Boolean deleted = Boolean.FALSE;
+//    private Boolean deleted = Boolean.FALSE;
 }

@@ -20,8 +20,8 @@ import java.util.Date;
         name = "banks_tb",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"bankCode"})}
 )
-@SQLDelete(sql = "UPDATE banks_tb SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE banks_tb SET deleted = true WHERE id = ?")
+//@Where(clause = "deleted = false")
 public class Bank {
     @Id
     @GeneratedValue(
@@ -33,5 +33,5 @@ public class Bank {
     private Boolean status=true;
     @CreationTimestamp
     private LocalDateTime createdDate;
-    private Boolean deleted = Boolean.FALSE;
+//    private Boolean deleted = Boolean.FALSE;
 }
