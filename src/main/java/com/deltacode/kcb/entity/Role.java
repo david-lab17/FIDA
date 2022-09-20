@@ -2,8 +2,6 @@ package com.deltacode.kcb.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -18,8 +16,7 @@ public class Role {
     private Long id;
     @Column(length = 60)
     private String name;
-    private String description;
-    private Boolean deleted = Boolean.FALSE;
+//    private Boolean deleted = Boolean.FALSE;
 //    @ManyToMany
 //    @JoinTable(
 //            name = "roles_privileges",
