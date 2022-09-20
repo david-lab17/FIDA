@@ -35,8 +35,9 @@ public class RoleService {
         return roleRepository.findById(id).orElse(null);
     }
 
+    //delete role
     public void delete(long id) {
-        roleRepository.deleteById(id);
+        roleRepository.delete(findById(id));
     }
 
     public void assignRole(Long userId, Long roleId){

@@ -8,6 +8,6 @@
 //@Repository
 //public interface PrivilegesRepository extends JpaRepository<Privileges, Long> {
 //
-//    Optional<Privileges> findByName(String name);
+//    Privileges findByName(String name);
 //}
 //

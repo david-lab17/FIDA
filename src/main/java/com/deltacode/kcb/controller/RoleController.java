@@ -26,53 +26,68 @@ public class RoleController {
         this.userService = userService;
     }
 
-
-    @GetMapping("/roles")
-    public String getStates(Model model) {
-        List<Role> roleList = roleService.getRoles();
-        model.addAttribute("roles", roleList);
-        return roleList.toString();
-    }
-    @GetMapping("/user/Edit/{id}")
-    public String editUser(@PathVariable Long id, Model model){
-        UserApp user = userService.findById(id);
-        model.addAttribute("user", user);
-        model.addAttribute("userRoles", roleService.getUserRoles(user));
-        model.addAttribute("userNotRoles", roleService.getUserNotRoles(user));
-        return "/userEdit";
-    }
-    @PostMapping("/roles/addNew")
-    public String addNew(Role role) {
-        roleService.save(role);
-        return "redirect:/roles";
-    }
-    @GetMapping("roles/findById")
+//
+//    }
+//    @GetMapping("/user/Edit/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String editUser(@PathVariable Long id, Model model){
+//        UserApp user = userService.findById(id);
+//        model.addAttribute("user", user);
+//        model.addAttribute("userRoles", roleService.getUserRoles(user));
+//        model.addAttribute("userNotRoles", roleService.getUserNotRoles(user));
+//        return user.toString();
+//    }
+    @GetMapping("roles/findById/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
-    public Role findById(long id) {
+    public Role findById(@PathVariable Long id) {
         return roleService.findById(id);
     }
 
     @PutMapping(value="/roles/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public String update(Role role) {
         roleService.save(role);
         return "redirect:/roles";
     }
-    @DeleteMapping(value="/roles/delete/{roleId}")
-    public String delete(Long id) {
-        roleService.delete(id);
-        return "redirect:/roles";
+
+
+    // Get all roles
+    @ApiOperation(value = "Get all roles")
+    @GetMapping("/roles")
+    public List<Role> getAllRoles() {
+        return roleService.getRoles();
     }
-    @PostMapping("/role/assign/{userId}/{roleId}")
-    public String assignRole(@PathVariable Long userId,
-                             @PathVariable Long roleId){
+    //assign role to user
+    @ApiOperation(value = "Assign role to user")
+    @PostMapping("/roles/assign/{userId}/{roleId}")
+    public String assignRoleToUser(@PathVariable Long userId,
+                                   @PathVariable Long roleId){
         roleService.assignRole(userId, roleId);
         return "redirect:/user/Edit/"+userId;
     }
-    @DeleteMapping("/role/unassign/{userId}/{roleId}")
-    public String unassignRole(@PathVariable Long userId,
-                               @PathVariable Long roleId){
+    //unassign role to user
+    @ApiOperation(value = "Unassign role to user")
+    @DeleteMapping("/roles/unassign/{userId}/{roleId}")
+    public String unassignRoleToUser(@PathVariable Long userId,
+                                     @PathVariable Long roleId){
         roleService.unassignRole(userId, roleId);
         return "redirect:/user/Edit/"+userId;
+    }
+    //delete role
+    @ApiOperation(value = "Delete role")
+    @DeleteMapping("/roles/delete/{id}")
+    public String deleteRole(@PathVariable Long id){
+        roleService.delete(id);
+        return "redirect:/roles";
+    }
+
+    //add new role
+    @ApiOperation(value = "Add new role")
+    @PostMapping("/roles/addNew")
+    public String addNew(Role role) {
+        roleService.save(role);
+        return "redirect:/roles";
     }
 
 
