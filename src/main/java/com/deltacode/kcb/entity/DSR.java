@@ -28,7 +28,7 @@ public class DSR {
     private String middleName;
     private String dateOfBirth;
     private Boolean status=true;
-    private Boolean gender;
+    private String gender;
     @CreationTimestamp
     private LocalDateTime createdDate;
     @ManyToOne(fetch = FetchType.LAZY)

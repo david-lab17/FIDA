@@ -17,7 +17,7 @@ public class DSRDto {
     private String username;
     @ApiModelProperty(value = "User's first name", required = true)
     private String firstName;
-    @ApiModelProperty(value = "Email")
+    @ApiModelProperty(value = "Email", required = true)
     private String email;
     @ApiModelProperty(value = "Password", required = true)
     private String password;
@@ -25,17 +25,17 @@ public class DSRDto {
     private String lastName;
     @ApiModelProperty(value = "User's last name", required = false)
     private String middleName;
-    @ApiModelProperty(value = "Team ", required = true)
-    private Team team;
-    @ApiModelProperty(value = "Date of birth", required = true)
+//    @ApiModelProperty(value = "Team ", required = false)
+//    private Team team;
+    @ApiModelProperty(value = "Date of birth", required = false)
     private String dateOfBirth;
     @ApiModelProperty(value = "Phone number", required = true)
     private String phoneNumber;
     @ApiModelProperty(value = "Id Number", required = true)
     private Integer idNumber;
-    @ApiModelProperty(value = "Role", required = true)
-    private Boolean gender;
-    @ApiModelProperty(value = "Role", required = true)
+    @ApiModelProperty(value = "Gender", required = true)
+    private String gender;
+    @ApiModelProperty(value = "Status", required = true)
     private Boolean status;
     private Long teamId;
 
