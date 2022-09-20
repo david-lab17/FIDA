@@ -3,6 +3,8 @@ package com.deltacode.kcb.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import java.util.Date;
         name = "complaint_type_tb"
 
 )
+@SQLDelete(sql = "UPDATE complaint_type_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class ComplaintType {
     @Id
     @GeneratedValue(
@@ -27,5 +31,6 @@ public class ComplaintType {
     private Boolean status=true;
     @CreatedDate
     private Date createdDate;
+    private Boolean deleted = Boolean.FALSE;
 }
 

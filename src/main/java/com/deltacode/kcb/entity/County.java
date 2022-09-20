@@ -3,6 +3,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -16,6 +19,8 @@ import java.util.Set;
 
 @Table(name = "county_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"countyName"}),
         @UniqueConstraint(columnNames = {"countyCode"})})
+@SQLDelete(sql = "UPDATE county_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class County {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +35,5 @@ public class County {
     private LocalDateTime createdDate;
     @OneToMany(mappedBy = "county", cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Constituency> constituencies =new HashSet<>();
+    private Boolean deleted = Boolean.FALSE;
 }

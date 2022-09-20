@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -18,6 +20,8 @@ import java.util.Date;
         name = "branches_tb",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"branchCode"})}
 )
+@SQLDelete(sql = "UPDATE branches_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Branch {
     @Id
     @GeneratedValue(
@@ -29,4 +33,5 @@ public class Branch {
     private Boolean status=true;
     @CreationTimestamp
     private LocalDateTime createdDate;
+    private Boolean deleted = Boolean.FALSE;
 }

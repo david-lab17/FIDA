@@ -4,6 +4,8 @@ import com.deltacode.kcb.payload.TeamDto;
 import com.fasterxml.jackson.databind.Module;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "zone_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"zoneName"})})
+@SQLDelete(sql = "UPDATE zone_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Zone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +32,6 @@ public class Zone {
     private LocalDateTime createdDate;
     @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<Team> teams =new HashSet<>();
+    private Boolean deleted = Boolean.FALSE;
 
 }
