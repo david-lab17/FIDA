@@ -11,8 +11,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "roles_tb")
-@SQLDelete(sql = "UPDATE roles_tb SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

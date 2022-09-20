@@ -15,8 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "app_user_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}),
         @UniqueConstraint(columnNames = {"email"})})
-@SQLDelete(sql = "UPDATE app_user_tb SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+
 public class UserApp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,5 +37,4 @@ public class UserApp {
     @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    private Boolean deleted = Boolean.FALSE;
 }
