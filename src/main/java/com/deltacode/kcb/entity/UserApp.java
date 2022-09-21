@@ -1,5 +1,6 @@
 package com.deltacode.kcb.entity;
 
+import com.deltacode.kcb.utils.Auditable;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
@@ -18,7 +19,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE app_user_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 
-public class UserApp {
+public class UserApp extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,8 +33,6 @@ public class UserApp {
     private Boolean deleted = Boolean.FALSE;
     @Column(name="dob")
     private Date dateOfBirth;
-    @CreationTimestamp
-    private LocalDateTime createdDate;
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)

@@ -8,6 +8,7 @@ import com.deltacode.kcb.payload.TeamResponse;
 import com.deltacode.kcb.repository.TeamRepository;
 import com.deltacode.kcb.repository.ZoneRepository;
 import com.deltacode.kcb.service.TeamService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+@Slf4j
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -33,6 +35,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDto createTeam(long zoneId, TeamDto teamDto) {
+        log.info("Creating Team");
         Team team = mapToEntity(teamDto);
         //set zone to team
        // retrieve zone entity by id
@@ -48,6 +51,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamResponse getAllTeams(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all teams");
         Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -67,6 +71,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<TeamDto> getTeamByZoneId(long zoneId) {
+        log.info("Getting teams by zone id = {}", zoneId);
         //retrieve team by zoneId
         List<Team> teams = teamRepository.findByZoneId(zoneId);
         //convert list of team entities to list of team dto's
@@ -75,6 +80,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDto getTeamById(Long zoneId, Long teamId) {
+        log.info("Getting team by id = {} and zone id = {}", teamId, zoneId);
         //retrieve zone by id
         Zone zone = zoneRepository.findById(zoneId).orElseThrow(
                 () -> new ResourceNotFoundException("Zone", "id", zoneId));
@@ -90,6 +96,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamDto updateTeam(Long zoneId, long teamId, TeamDto teamDto) {
+        log.info("Updating team by id = {} and zone id = {}", teamId, zoneId);
         //retrieve zone by id
         Zone zone = zoneRepository.findById(zoneId).orElseThrow(
                 () -> new ResourceNotFoundException("Zone", "id", zoneId));
@@ -114,6 +121,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void deleteTeam(Long zoneId, Long teamId) {
+        log.info("Deleting team by id = {} and zone id = {}", teamId, zoneId);
         //retrieve zone by id
         Zone zone = zoneRepository.findById(zoneId).orElseThrow(
                 () -> new ResourceNotFoundException("Zone", "id", zoneId));

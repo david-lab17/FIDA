@@ -5,6 +5,7 @@ import com.deltacode.kcb.payload.ComplaintTypeDto;
 import com.deltacode.kcb.payload.ComplaintTypeResponse;
 import com.deltacode.kcb.repository.ComplaintTypeRepository;
 import com.deltacode.kcb.service.ComplaintTypeService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 
 @Service
 public class ComplaintTypeImpl implements ComplaintTypeService {
@@ -27,6 +29,7 @@ public class ComplaintTypeImpl implements ComplaintTypeService {
 
     @Override
     public ComplaintTypeDto createComplaintType(ComplaintTypeDto complaintTypeDto) {
+        log.info("Creating complaint type");
         ComplaintType complaintType = modelMapper.map(complaintTypeDto, ComplaintType.class);
         complaintTypeRepository.save(complaintType);
         return modelMapper.map(complaintType, ComplaintTypeDto.class);
@@ -34,6 +37,7 @@ public class ComplaintTypeImpl implements ComplaintTypeService {
 
     @Override
     public ComplaintTypeResponse getAllComplaintTypes(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all complaint types");
         Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -53,12 +57,14 @@ public class ComplaintTypeImpl implements ComplaintTypeService {
 
     @Override
     public ComplaintTypeDto getComplaintTypesById(Long id) {
+        log.info("Getting complaint type by id {}", id);
         ComplaintType complaintType = complaintTypeRepository.findById(id).orElseThrow( () -> new RuntimeException("Complaint Type not found"));
         return modelMapper.map(complaintType, ComplaintTypeDto.class);
     }
 
     @Override
     public ComplaintTypeDto updateComplaintTypes(ComplaintTypeDto complaintTypeDto, Long id) {
+        log.info("Updating complaint type by id {}", id);
         ComplaintType complaintType = complaintTypeRepository.findById(id).orElseThrow();
         complaintType.setComplaintTypeName(complaintTypeDto.getComplaintTypeName());
         complaintType.setDescription(complaintTypeDto.getDescription());
@@ -68,6 +74,7 @@ public class ComplaintTypeImpl implements ComplaintTypeService {
 
     @Override
     public void deleteComplaintTypeById(Long id) {
+        log.info("Deleting complaint type by id {}", id);
         complaintTypeRepository.deleteById(id);
 
     }

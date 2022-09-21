@@ -38,14 +38,12 @@ public class RoleController {
 //        return user.toString();
 //    }
     @GetMapping("roles/findById/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public Role findById(@PathVariable Long id) {
         return roleService.findById(id);
     }
 
     @PutMapping(value="/roles/update")
-    @PreAuthorize("hasRole('ADMIN')")
     public String update(Role role) {
         roleService.save(role);
         return "redirect:/roles";

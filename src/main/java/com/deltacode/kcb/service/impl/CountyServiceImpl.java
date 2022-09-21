@@ -7,6 +7,7 @@ import com.deltacode.kcb.payload.CountyDto;
 import com.deltacode.kcb.payload.CountyResponse;
 import com.deltacode.kcb.repository.CountyRepository;
 import com.deltacode.kcb.service.CountyService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 @Service
 public class CountyServiceImpl implements CountyService {
     private final CountyRepository countyRepository;
@@ -27,6 +29,7 @@ public class CountyServiceImpl implements CountyService {
 
     @Override
     public CountyDto createCounty(CountyDto countyDto) {
+        log.info("Creating county");
         County county =mapToEntity(countyDto);
         County newCounty =  countyRepository.save(county);
         return mapToDto(newCounty);
@@ -36,6 +39,7 @@ public class CountyServiceImpl implements CountyService {
 
     @Override
     public CountyResponse getAllCounties(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all counties");
         Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -55,12 +59,14 @@ public class CountyServiceImpl implements CountyService {
 
     @Override
     public CountyDto getCountyById(Long id) {
+        log.info("Getting county by id = {}", id);
         County county = countyRepository.findById(id).orElseThrow( () -> new RuntimeException("County not found"));
         return modelMapper.map(county, CountyDto.class);
     }
 
     @Override
     public CountyDto updateCounty(CountyDto countyDto, Long id) {
+        log.info("Updating county with id = {}", id);
         County county = countyRepository.findById(id).orElseThrow( () -> new RuntimeException("County not found"));
         county.setCountyName(countyDto.getCountyName());
         county.setCountyCode(countyDto.getCountyCode());
@@ -71,6 +77,7 @@ public class CountyServiceImpl implements CountyService {
 
     @Override
     public void deleteCountyById(Long id) {
+        log.info("Deleting county with id = {}", id);
         //check if county exists
         countyRepository.findById(id).orElseThrow( () -> new RuntimeException("County not found"));
         countyRepository.deleteById(id);

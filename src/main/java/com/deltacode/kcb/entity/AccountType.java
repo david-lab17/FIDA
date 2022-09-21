@@ -1,5 +1,6 @@
 package com.deltacode.kcb.entity;
 
+import com.deltacode.kcb.utils.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Date;
 )
 @SQLDelete(sql = "UPDATE accountType_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class AccountType {
+public class AccountType  extends Auditable<String> {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -30,8 +31,6 @@ public class AccountType {
     private String accountTypeName;
     private String accountTypeCode;
     private Boolean status=true;
-    @CreationTimestamp
-    private LocalDateTime createdDate;
     private Boolean deleted = Boolean.FALSE;
 }
 

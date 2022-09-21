@@ -5,6 +5,7 @@ import com.deltacode.kcb.payload.BusinessTypeDto;
 import com.deltacode.kcb.payload.BusinessTypeResponse;
 import com.deltacode.kcb.repository.BusinessTypeRepository;
 import com.deltacode.kcb.service.BusinessTypeService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 
 @Service
 public class BusinessTypeImpl implements BusinessTypeService {
@@ -26,6 +28,7 @@ public class BusinessTypeImpl implements BusinessTypeService {
 
     @Override
     public BusinessTypeDto createBusinessType(BusinessTypeDto businessTypeDto) {
+        log.info("Creating business type");
         BusinessType businessType = modelMapper.map(businessTypeDto, BusinessType.class);
         businessTypeRepository.save(businessType);
         return modelMapper.map(businessType, BusinessTypeDto.class);
@@ -34,6 +37,7 @@ public class BusinessTypeImpl implements BusinessTypeService {
 
     @Override
     public BusinessTypeResponse getAllBusinessTypes(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all business types");
         Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable=org.springframework.data.domain.PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -54,12 +58,14 @@ public class BusinessTypeImpl implements BusinessTypeService {
 
     @Override
     public BusinessTypeDto getBusinessTypesById(Long id) {
+        log.info("Getting business type by id {}", id);
         BusinessType businessType = businessTypeRepository.findById(id).orElseThrow(() -> new RuntimeException("Business Type not found"));
         return modelMapper.map(businessType, BusinessTypeDto.class);
     }
 
     @Override
     public BusinessTypeDto updateBusinessTypes(BusinessTypeDto businessTypeDto, Long id) {
+        log.info("Updating business type by id {}", id);
         BusinessType businessType = businessTypeRepository.findById(id).orElseThrow(() -> new RuntimeException("Business Type not found"));
         businessType.setBusinessTypeName(businessTypeDto.getBusinessTypeName());
         businessTypeRepository.save(businessType);
@@ -68,6 +74,7 @@ public class BusinessTypeImpl implements BusinessTypeService {
 
     @Override
     public void deleteBusinessTypeById(Long id) {
+        log.info("Deleting business type by id {}", id);
         BusinessType businessType = businessTypeRepository.findById(id).orElseThrow(() -> new RuntimeException("Business Type not found"));
         businessTypeRepository.delete(businessType);
 

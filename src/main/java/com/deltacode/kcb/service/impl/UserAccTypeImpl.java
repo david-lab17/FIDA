@@ -5,6 +5,7 @@ import com.deltacode.kcb.payload.UserAccTypeDto;
 import com.deltacode.kcb.payload.UserAccTypeResponse;
 import com.deltacode.kcb.repository.UserAccTypeRepository;
 import com.deltacode.kcb.service.UserAccTypeService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 @Service
+
 
 public class UserAccTypeImpl implements UserAccTypeService {
     private final UserAccTypeRepository userAccTypeRepository;
@@ -25,6 +28,7 @@ public class UserAccTypeImpl implements UserAccTypeService {
 
     @Override
     public UserAccTypeDto createUserAccType(UserAccTypeDto userAccTypeDto) {
+        log.info("Creating user account type");
         UserAccType userAccType = modelMapper.map(userAccTypeDto, UserAccType.class);
         userAccTypeRepository.save(userAccType);
         return modelMapper.map(userAccType, UserAccTypeDto.class);
@@ -33,6 +37,7 @@ public class UserAccTypeImpl implements UserAccTypeService {
 
     @Override
     public UserAccTypeResponse getAllUserAccTypes(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all user account types");
         Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable=org.springframework.data.domain.PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -53,12 +58,14 @@ public class UserAccTypeImpl implements UserAccTypeService {
 
     @Override
     public UserAccTypeDto getUserAccTypesById(Long id) {
+        log.info("Getting user account type by id = {}", id);
         UserAccType userAccType=userAccTypeRepository.findById(id).orElseThrow(()->new RuntimeException("User Account Type not found"));
         return modelMapper.map(userAccType, UserAccTypeDto.class);
     }
 
     @Override
     public UserAccTypeDto updateUserAccTypes(UserAccTypeDto userAccTypeDto, Long id) {
+        log.info("Updating user account type by id = {}", id);
         UserAccType userAccType=userAccTypeRepository.findById(id).orElseThrow(()->new RuntimeException("User Account Type not found"));
         userAccType.setUserAccTypeName(userAccTypeDto.getUserAccTypeName());
         userAccTypeRepository.save(userAccType);
@@ -68,6 +75,7 @@ public class UserAccTypeImpl implements UserAccTypeService {
 
     @Override
     public void deleteUserAccTypeById(Long id) {
+        log.info("Deleting user account type by id = {}", id);
         UserAccType userAccType=userAccTypeRepository.findById(id).orElseThrow(()->new RuntimeException("User Account Type not found"));
         userAccTypeRepository.delete(userAccType);
 

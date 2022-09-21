@@ -6,6 +6,7 @@ import com.deltacode.kcb.payload.LiquidationResponse;
 import com.deltacode.kcb.payload.LiquidationTypeDto;
 import com.deltacode.kcb.repository.LiquidationRepository;
 import com.deltacode.kcb.service.LiquidationTypeService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 
 @Service
 public class LiquidationTypeServiceImpl implements LiquidationTypeService {
@@ -26,6 +28,7 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
 
     @Override
     public LiquidationTypeDto createLiquidationType(LiquidationTypeDto liquidationTypeDto) {
+        log.info("Creating liquidation type");
         LiquidationType liquidationType = modelMapper.map(liquidationTypeDto, LiquidationType.class);
         LiquidationType newLiquidationType = liquidationRepository.save(liquidationType);
         return modelMapper.map(newLiquidationType, LiquidationTypeDto.class);
@@ -33,6 +36,7 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
 
     @Override
     public LiquidationResponse getAllLiquidationType(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all liquidation types");
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = org.springframework.data.domain.PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -52,12 +56,14 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
 
     @Override
     public LiquidationTypeDto getLiquidationTypeById(Long id) {
+        log.info("Getting liquidation type by id = {}", id);
         LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
         return modelMapper.map(liquidationType, LiquidationTypeDto.class);
     }
 
     @Override
     public LiquidationTypeDto updateLiquidationType(LiquidationTypeDto liquidationTypeDto, Long id) {
+        log.info("Updating liquidation type by id = {}", id);
         LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
         modelMapper.map(liquidationTypeDto, liquidationType);
         LiquidationType updatedLiquidationType = liquidationRepository.save(liquidationType);
@@ -66,6 +72,9 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
 
     @Override
     public void deleteLiquidationTypeById(Long id) {
+        log.info("Deleting liquidation type by id = {}", id);
+        LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
+        liquidationRepository.delete(liquidationType);
 
     }
     //convert entity to dto

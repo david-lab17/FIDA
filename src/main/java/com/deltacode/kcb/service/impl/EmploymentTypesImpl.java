@@ -6,6 +6,7 @@ import com.deltacode.kcb.payload.EmploymentTypeDto;
 import com.deltacode.kcb.payload.EmploymentTypeResponse;
 import com.deltacode.kcb.repository.EmploymentTypeRepository;
 import com.deltacode.kcb.service.EmploymentTypeService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 @Service
 public class EmploymentTypesImpl implements EmploymentTypeService {
     private  final EmploymentTypeRepository employmentTypeRepository;
@@ -26,6 +28,7 @@ public class EmploymentTypesImpl implements EmploymentTypeService {
 
     @Override
     public EmploymentTypeDto createEmploymentType(EmploymentTypeDto employmentTypeDto) {
+        log.info("Creating employment type");
         EmploymentType employmentType = modelMapper.map(employmentTypeDto, EmploymentType.class);
         employmentTypeRepository.save(employmentType);
         return modelMapper.map(employmentType, EmploymentTypeDto.class);
@@ -33,6 +36,7 @@ public class EmploymentTypesImpl implements EmploymentTypeService {
 
     @Override
     public EmploymentTypeResponse getAllEmploymentTypes(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all employment types");
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -52,12 +56,14 @@ public class EmploymentTypesImpl implements EmploymentTypeService {
 
     @Override
     public EmploymentTypeDto getEmploymentTypesById(Long id) {
+        log.info("Getting employment type by id = {}", id);
         EmploymentType employmentType = employmentTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EmploymentType", "id", id));
         return mapToDto(employmentType);
     }
 
     @Override
     public EmploymentTypeDto updateEmploymentTypes(EmploymentTypeDto employmentTypeDto, Long id) {
+        log.info("Updating employment type with id: {}", id);
         EmploymentType employmentType = employmentTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EmploymentType", "id", id));
         employmentType.setEmploymentTypeName(employmentTypeDto.getEmploymentTypeName());
         employmentTypeRepository.save(employmentType);
@@ -66,6 +72,7 @@ public class EmploymentTypesImpl implements EmploymentTypeService {
 
     @Override
     public void deleteEmploymentTypeById(Long id) {
+        log.info("Deleting employment type with id: {}", id);
         EmploymentType employmentType = employmentTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EmploymentType", "id", id));
         employmentTypeRepository.delete(employmentType);
 

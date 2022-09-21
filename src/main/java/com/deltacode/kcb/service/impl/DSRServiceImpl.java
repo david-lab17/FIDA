@@ -8,6 +8,7 @@ import com.deltacode.kcb.payload.DSRResponse;
 import com.deltacode.kcb.repository.DSRRepository;
 import com.deltacode.kcb.repository.TeamRepository;
 import com.deltacode.kcb.service.DSRService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+@Slf4j
 
 @Service
 public class DSRServiceImpl implements DSRService {
@@ -33,6 +35,7 @@ public class DSRServiceImpl implements DSRService {
 
     @Override
     public DSRDto createDSR(long teamId, DSRDto dsrDto) {
+        log.info("Creating DSR");
         DSR dsr = mapToEntity(dsrDto);
         //set team to dsr
         // retrieve team entity by id
@@ -47,6 +50,8 @@ public class DSRServiceImpl implements DSRService {
 
     @Override
     public List<DSRDto> getDSRByTeamId(long teamId) {
+        log.info("Getting all DSRs by team id = {}", teamId);
+
 //retrieve dsr by teamId
         List<DSR> dsr = dsrRepository.findByTeamId(teamId);
         //convert list of dsr entities to list of dsr dto's
@@ -56,6 +61,7 @@ public class DSRServiceImpl implements DSRService {
 
     @Override
     public DSRResponse getAllDSRs(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all DSRs");
         Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -75,6 +81,7 @@ public class DSRServiceImpl implements DSRService {
 
     @Override
     public DSRDto getDSRById(Long teamId, Long dsrId) {
+        log.info("Getting DSR by id = {}", dsrId);
         //retrieve team by id
         Team team = teamRepository.findById(teamId).orElseThrow(
                 () -> new ResourceNotFoundException("Team", "id", teamId));
@@ -90,6 +97,7 @@ public class DSRServiceImpl implements DSRService {
 
     @Override
     public DSRDto updateDSR(Long teamId, long dsrId, DSRDto dsrDto) {
+        log.info("Updating DSR by id = {} and Team id = {}", dsrId, teamId);
         //retrieve team by id
         Team team = teamRepository.findById(teamId).orElseThrow(
                 () -> new ResourceNotFoundException("Team", "id", teamId));
@@ -118,6 +126,7 @@ public class DSRServiceImpl implements DSRService {
 
     @Override
     public void deleteDSR(Long teamId, Long dsrId) {
+        log.info("Deleting DSR by id = {} and Team id = {}", dsrId, teamId);
         //retrieve team by id
         Team team = teamRepository.findById(teamId).orElseThrow(
                 () -> new ResourceNotFoundException("Team", "id", teamId));

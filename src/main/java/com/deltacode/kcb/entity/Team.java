@@ -1,6 +1,7 @@
 package com.deltacode.kcb.entity;
 
 import com.deltacode.kcb.payload.DSRDto;
+import com.deltacode.kcb.utils.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.Set;
         @UniqueConstraint(columnNames = {"teamCode"})})
 @SQLDelete(sql = "UPDATE team_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Team {
+public class Team extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +32,6 @@ public class Team {
     private Boolean status=true;
     private String teamCode;
     private String teamManager;
-    @CreationTimestamp
-    private LocalDateTime createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zone_id",nullable = false)
     private Zone zone;

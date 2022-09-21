@@ -1,4 +1,5 @@
 package com.deltacode.kcb.entity;
+import com.deltacode.kcb.utils.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Set;
         @UniqueConstraint(columnNames = {"countyCode"})})
 @SQLDelete(sql = "UPDATE county_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class County {
+public class County  extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +32,6 @@ public class County {
     private String description;
     @Column(nullable = false)
     private Boolean status=true;
-    @CreationTimestamp
-    private LocalDateTime createdDate;
     @OneToMany(mappedBy = "county", cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Constituency> constituencies =new HashSet<>();
     private Boolean deleted = Boolean.FALSE;

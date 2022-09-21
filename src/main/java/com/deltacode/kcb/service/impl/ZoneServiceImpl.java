@@ -6,6 +6,7 @@ import com.deltacode.kcb.payload.ZoneDto;
 import com.deltacode.kcb.payload.ZoneResponse;
 import com.deltacode.kcb.repository.ZoneRepository;
 import com.deltacode.kcb.service.ZoneService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 @Service
 public class ZoneServiceImpl implements ZoneService {
     private final ZoneRepository zoneRepository;
@@ -26,6 +28,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public ZoneDto createZone(ZoneDto zoneDto) {
+        log.info("Creating zone");
         //convert Dto to entity
         Zone zone = mapToEntity(zoneDto);
         Zone newZone = zoneRepository.save(zone);
@@ -35,6 +38,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public ZoneResponse getAllZones(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all zones");
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -54,12 +58,14 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public ZoneDto getZoneById(Long id) {
+        log.info("Getting zone by id = {}", id);
         Zone zone = zoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Zone", "id", id));
         return mapToDto(zone);
     }
 
     @Override
     public ZoneDto updateZone(ZoneDto zoneDto, Long id) {
+        log.info("Updating zone by id = {}", id);
         Zone zone = zoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Zone", "id", id));
         zone.setZoneName(zoneDto.getZoneName());
         zone.setZoneDescription(zoneDto.getZoneDescription());
@@ -71,6 +77,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public void deleteZoneById(Long id) {
+        log.info("Deleting zone by id = {}", id);
         Zone zone = zoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Zone", "id", id));
         zoneRepository.delete(zone);
 

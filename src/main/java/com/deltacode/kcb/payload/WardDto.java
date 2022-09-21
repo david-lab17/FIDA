@@ -1,5 +1,6 @@
 package com.deltacode.kcb.payload;
 
+import com.deltacode.kcb.utils.Auditable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,9 +11,8 @@ import java.time.LocalDateTime;
 
 @ApiModel(description = "Ward object")
 @Data
-public class WardDto {
+public class WardDto extends Auditable<String> {
     private Long id;
-    private LocalDateTime createdDate;
     @NotEmpty(message = "Name of the Ward is required")
     @Size(min = 2, message = "Name must have at least 2 characters")
     @ApiModelProperty(value = "Ward name")

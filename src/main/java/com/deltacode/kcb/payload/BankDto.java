@@ -1,5 +1,6 @@
 package com.deltacode.kcb.payload;
 
+import com.deltacode.kcb.utils.Auditable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,9 +12,8 @@ import java.util.Date;
 
 @ApiModel(description = "Bank object")
 @Data
-public class BankDto {
+public class BankDto extends Auditable<String> {
     private Long id;
-    private LocalDateTime createdDate;
     @NotEmpty(message = "Name of the bank is required")
     @Size(min = 2, message = "Name must have at least 2 characters")
     @ApiModelProperty(value = "Bank name")
@@ -23,6 +23,7 @@ public class BankDto {
     private String bankCode;
     @ApiModelProperty(value = "Bank status")
     private boolean status=true;
+
 
 
 }

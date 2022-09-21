@@ -1,5 +1,6 @@
 package com.deltacode.kcb.payload;
 
+import com.deltacode.kcb.utils.Auditable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,9 +12,8 @@ import java.util.Date;
 
 @ApiModel(description = "Employment Type object")
 @Data
-public class EmploymentTypeDto {
+public class EmploymentTypeDto extends Auditable<String> {
     private Long id;
-    private LocalDateTime createdDate;
     @NotEmpty(message = "Employment type name is required")
     @Size(min = 2, message = "Employment Type Name must have at least 2 characters")
     @ApiModelProperty(value = "Employment Type  name")

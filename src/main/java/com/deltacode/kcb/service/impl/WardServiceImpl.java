@@ -11,6 +11,7 @@ import com.deltacode.kcb.payload.WardResponse;
 import com.deltacode.kcb.repository.ConstituencyRepository;
 import com.deltacode.kcb.repository.WardRepository;
 import com.deltacode.kcb.service.WardService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+@Slf4j
 
 @Service
 
@@ -37,6 +39,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public WardDto createWard(long constituencyId, WardDto wardDto) {
+        log.info("Creating ward");
         Ward ward =mapToEntity(wardDto);
         //set constituency to ward
         // retrieve constituency entity by id
@@ -52,6 +55,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public WardResponse getAllWards(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all wards");
         Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -71,6 +75,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public List<WardDto> getWardByConstituencyId(long constituencyId) {
+        log.info("Getting wards by constituency id {}", constituencyId);
         // retrieve ward by constituencyId
         List<Ward> wards = wardRepository.findByConstituencyId(constituencyId);
         // convert list of ward entities to list of ward dto's
@@ -80,6 +85,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public WardDto getWardById(Long constituencyId, Long wardId) {
+        log.info("Getting ward by id {}", wardId);
         // retrieve constituency by id
         Constituency constituency =constituencyRepository.findById(constituencyId).orElseThrow(
                 () -> new ResourceNotFoundException("Constituency", "id", constituencyId));
@@ -96,6 +102,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public WardDto updateWard(Long constituencyId, long wardId, WardDto wardDto) {
+        log.info("Updating ward by id {}", wardId);
         Constituency constituency =constituencyRepository.findById(constituencyId).orElseThrow(
                 () -> new ResourceNotFoundException("Constituency", "id", constituencyId));
         Ward ward = wardRepository.findById(wardId).orElseThrow(
@@ -112,6 +119,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public void deleteWard(Long constituencyId, Long wardId) {
+        log.info("Deleting ward by id {}", wardId);
         Constituency constituency =constituencyRepository.findById(constituencyId).orElseThrow(
                 () -> new ResourceNotFoundException("Constituency", "id", constituencyId));
         Ward ward = wardRepository.findById(wardId).orElseThrow(

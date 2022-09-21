@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,11 +28,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     //implementation of UserDetailsService
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         UserApp userApp = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).orElseThrow(() ->
                 new UsernameNotFoundException("User not found with username or email : " + usernameOrEmail));
         return new User(userApp.getUsername(), userApp.getPassword(),mapRolesToAuthorities(userApp.getRoles()));
     }
+
 
    // map roles to authorities
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roles) {

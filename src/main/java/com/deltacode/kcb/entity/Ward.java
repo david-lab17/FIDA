@@ -1,5 +1,6 @@
 package com.deltacode.kcb.entity;
 
+import com.deltacode.kcb.utils.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 )
 @SQLDelete(sql = "UPDATE ward_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Ward {
+public class Ward extends Auditable<String> {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -31,8 +32,6 @@ public class Ward {
     private String  wardCode;
     private String description;
     private Boolean status=true;
-    @CreationTimestamp
-    private LocalDateTime createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "constituency_id",nullable = false)
     private Constituency constituency;

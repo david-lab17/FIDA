@@ -9,6 +9,7 @@ import com.deltacode.kcb.payload.*;
 import com.deltacode.kcb.repository.ConstituencyRepository;
 import com.deltacode.kcb.repository.CountyRepository;
 import com.deltacode.kcb.service.ConstituencyService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+@Slf4j
 
 @Service
 
@@ -38,6 +40,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
     @Override
     public ConstituencyDto createConstituency(long countyId, ConstituencyDto constituencyDto) {
+        log.info("Creating constituency");
         Constituency constituency =mapToEntity(constituencyDto);
         // retrieve county entity by id
         County county = countyRepository.findById(countyId).orElseThrow(
@@ -54,6 +57,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
     @Override
     public List<ConstituencyDto> getConstituencyByCountyId(long countyId) {
+        log.info("Getting all constituencies by county id = {}", countyId);
         // retrieve constituency by countyId
         List<Constituency> constituencies = constituencyRepository.findByCountyId(countyId);
 
@@ -63,6 +67,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
     @Override
     public ConstituencyResponse getAllConstituency(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all constituencies");
         Sort sort=sortDir.equalsIgnoreCase(Sort
                 .Direction
                 .ASC
@@ -88,6 +93,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
     @Override
     public ConstituencyDto getConstituencyById(Long countyId, Long constituencyId) {
+        log.info("Getting constituency by id ={}", constituencyId);
         // retrieve county entity by id
         County county = countyRepository.findById(countyId).orElseThrow(
                 () -> new ResourceNotFoundException("County", "id", countyId));
@@ -105,6 +111,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
     @Override
     public ConstituencyDto updateConstituency(Long countyId, long constituencyId, ConstituencyDto constituencyDto) {
+        log.info("Updating constituency by id ={} and County id = {}", constituencyId, countyId);
         // retrieve county entity by id
         County county = countyRepository.findById(countyId).orElseThrow(
                 () -> new ResourceNotFoundException("County", "id", countyId));
@@ -123,6 +130,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
 
     @Override
     public void deleteConstituency(Long countyId, Long constituencyId) {
+        log.info("Deleting constituency by id ={} and County id = {}", constituencyId, countyId);
         // retrieve county entity by id
         County county = countyRepository.findById(countyId).orElseThrow(
                 () -> new ResourceNotFoundException("County", "id", countyId));

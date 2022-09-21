@@ -8,11 +8,13 @@ import com.deltacode.kcb.payload.BranchDto;
 import com.deltacode.kcb.payload.BranchResponse;
 import com.deltacode.kcb.repository.BranchRepository;
 import com.deltacode.kcb.service.BranchService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+@Slf4j
 
 @Service
 public class BranchServiceImpl implements BranchService {
@@ -26,6 +28,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchDto createBranch(BranchDto branchDto) {
+        log.info("Creating branch");
         //convert Dto to entity
         Branch branch = mapToEntity(branchDto);
         Branch newBranch = branchRepository.save(branch);
@@ -35,6 +38,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchResponse getAllBranches(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Getting all branches");
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
@@ -54,6 +58,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchDto getBranchById(Long id) {
+        log.info("Getting branch by id = {}", id);
         //check if branch exists
         Branch branch = branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
         return mapToDto(branch);
@@ -61,6 +66,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchDto updateBranch(BranchDto branchDto, Long id) {
+        log.info("Updating branch with id = {}", id);
         //check if branch exists
         Branch branch = branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
         //convert Dto to entity
@@ -74,6 +80,7 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public void deleteBranchById(Long id) {
+        log.info("Deleting branch with id = {}", id);
         //check if branch exists
         Branch branch = branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
         branchRepository.delete(branch);
