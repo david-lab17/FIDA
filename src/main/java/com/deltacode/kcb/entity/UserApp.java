@@ -15,6 +15,8 @@ import java.util.Set;
 @Entity
 @Table(name = "app_user_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}),
         @UniqueConstraint(columnNames = {"email"})})
+@SQLDelete(sql = "UPDATE app_user_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 
 public class UserApp {
     @Id
@@ -27,6 +29,7 @@ public class UserApp {
     private String lastName;
     private String phoneNumber;
     private String middleName;
+    private Boolean deleted = Boolean.FALSE;
     @Column(name="dob")
     private Date dateOfBirth;
     @CreationTimestamp

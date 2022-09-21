@@ -16,8 +16,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "employmentType_tb")
-//@SQLDelete(sql = "UPDATE employmentType_tb SET deleted = true WHERE id = ?")
-//@Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE employmentType_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class EmploymentType {
     @Id
     @GeneratedValue(
@@ -28,5 +28,5 @@ public class EmploymentType {
     private Boolean status=true;
     @CreationTimestamp
     private LocalDateTime createdDate;
-//    private Boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 }

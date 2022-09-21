@@ -23,8 +23,8 @@ import java.util.HashSet;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"constituencyName"}),
                 @UniqueConstraint(columnNames = {"constituencyCode"})}
 )
-//@SQLDelete(sql = "UPDATE constituency_tb SET deleted = true WHERE id = ?")
-//@Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE constituency_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Constituency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,5 +40,5 @@ public class Constituency {
     private County county;
     @OneToMany(mappedBy = "constituency",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Ward> wards =new HashSet<>();
-//    private Boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 }

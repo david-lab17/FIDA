@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"wardName"}),
                 @UniqueConstraint(columnNames = {"wardCode"})}
 )
-//@SQLDelete(sql = "UPDATE ward_tb SET deleted = true WHERE id = ?")
-//@Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE ward_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Ward {
     @Id
     @GeneratedValue(
@@ -36,5 +36,5 @@ public class Ward {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "constituency_id",nullable = false)
     private Constituency constituency;
-//    private Boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 }

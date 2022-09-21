@@ -2,6 +2,8 @@ package com.deltacode.kcb.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "roles_tb")
+@SQLDelete(sql = "UPDATE roles_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 
 public class Role {
     @Id
@@ -16,7 +20,7 @@ public class Role {
     private Long id;
     @Column(length = 60)
     private String name;
-//    private Boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 //    @ManyToMany
 //    @JoinTable(
 //            name = "roles_privileges",
