@@ -54,7 +54,11 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         //get token from token provider
         String token= tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JWTAuthResponse(token, "Bearer"));
+        //get user details from authentication
+        UserDetails userDetails=(UserDetails)authentication.getPrincipal();
+        //return response entity
+        return ResponseEntity.ok(new JWTAuthResponse(token,"Bearer"));
+//        return ResponseEntity.ok(new JWTAuthResponse(token, "Bearer"));
 
     }
     @PostMapping("/signup")
@@ -78,9 +82,9 @@ public class AuthController {
         userApp.setMiddleName(signUpDto.getMiddleName());
         userApp.setPhoneNumber(signUpDto.getPhoneNumber());
 
-        Role userRole = roleRepository.findByName("ROLE_ADMIN").get();
-        userApp.setRoles(Collections.singleton(userRole));
-        userRepository.save(userApp);
+        Role userRole = roleRepository.findByName("ROLE_ADMIN").get();//get role from db
+        userApp.setRoles(Collections.singleton(userRole));//set role to user
+        userRepository.save(userApp);//save user to db
         return ResponseEntity.ok("User registered successfully");
 
     }

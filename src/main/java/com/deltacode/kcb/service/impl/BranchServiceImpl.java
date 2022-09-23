@@ -68,13 +68,10 @@ public class BranchServiceImpl implements BranchService {
     public BranchDto updateBranch(BranchDto branchDto, Long id) {
         log.info("Updating branch with id = {}", id);
         //check if branch exists
-        Branch branch = branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
-        //convert Dto to entity
-        Branch newBranch = mapToEntity(branchDto);
-        newBranch.setBranchName(branch.getBranchName());
-        newBranch.setBranchCode(branch.getBranchCode());
-        Branch updatedBranch = branchRepository.save(newBranch);
-        //convert entity to Dto
+        Branch branch =branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
+        branch.setBranchName(branchDto.getBranchName());
+        branch.setBranchCode(branchDto.getBranchCode());
+        Branch updatedBranch = branchRepository.save(branch);
         return mapToDto(updatedBranch);
     }
 

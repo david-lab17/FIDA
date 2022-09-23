@@ -19,7 +19,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE app_user_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 
-public class UserApp extends Auditable<String> {
+public class UserApp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

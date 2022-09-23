@@ -37,18 +37,17 @@ public class SpringBootKcbRestApiApplication   {
 		SpringApplication.run(SpringBootKcbRestApiApplication.class, args);
 
 	}
-//	@Autowired
-//	private  RoleRepository roleRepository;
-//	@Override
-//	public void run(String... args) throws Exception {
-//		Role adminRole=new Role();
-//		adminRole.setName("ROLE_ADMIN");
-//		roleRepository.save(adminRole);
+//	@Bean
+//	CommandLineRunner init(RoleRepository roleRepository) {
+//		return args -> {
+//			Role userRole = new Role();
+//			userRole.setName("ROLE_USER");
+//			roleRepository.save(userRole);
+//			Role adminRole = new Role();
+//			adminRole.setName("ROLE_ADMIN");
+//			roleRepository.save(adminRole);
 //
-//		Role userRole=new Role();
-//		userRole.setName("ROLE_USER");
-//		roleRepository.save(userRole);
-//
+//		};
 //	}
 
 
