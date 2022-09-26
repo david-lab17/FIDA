@@ -12,6 +12,7 @@ import java.util.Date;
 @ApiModel(description = "User Acc Type object")
 @Data
 public class UserAccTypeDto extends Auditable<String> {
+    private Long id;
 
     @NotEmpty(message = "User Acc type name is required")
     @Size(min = 2, message = "User Acc Type Name must have at least 2 characters")
