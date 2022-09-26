@@ -123,6 +123,13 @@
 						</exclude>
 					</excludes>
 				</configuration>
+
+
+
+
+
+
+
 			</plugin>
 		</plugins>
 	</build>
