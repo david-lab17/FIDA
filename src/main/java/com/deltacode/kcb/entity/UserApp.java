@@ -32,7 +32,7 @@ public class UserApp {
     private String middleName;
     private Boolean deleted = Boolean.FALSE;
     @Column(name="dob")
-    private Date dateOfBirth;
+    private String dateOfBirth;
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)

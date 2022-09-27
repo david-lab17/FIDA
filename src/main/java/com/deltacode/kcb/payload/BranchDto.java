@@ -23,6 +23,7 @@ public class BranchDto extends Auditable<String> {
     private String branchCode;
     @ApiModelProperty(value = "Branch status")
     private boolean status=true;
+    private Long bankId;
 
 
 }

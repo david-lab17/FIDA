@@ -12,6 +12,8 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -32,5 +34,7 @@ public class Bank extends Auditable<String> {
     private String bankName;
     private String bankCode;
     private Boolean status=true;
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL,orphanRemoval = true)
+    private Set<Branch> branches =new HashSet<>();
     private Boolean deleted = Boolean.FALSE;
 }

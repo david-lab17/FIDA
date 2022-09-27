@@ -3,86 +3,121 @@ package com.deltacode.kcb.service.impl;
 import com.deltacode.kcb.entity.Bank;
 import com.deltacode.kcb.entity.Branch;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
-import com.deltacode.kcb.payload.BankDto;
 import com.deltacode.kcb.payload.BranchDto;
 import com.deltacode.kcb.payload.BranchResponse;
+import com.deltacode.kcb.repository.BankRepository;
 import com.deltacode.kcb.repository.BranchRepository;
 import com.deltacode.kcb.service.BranchService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 
 @Service
 public class BranchServiceImpl implements BranchService {
+
     private final BranchRepository branchRepository;
     private final ModelMapper modelMapper;
+    private  final BankRepository bankRepository;
 
-    public BranchServiceImpl(BranchRepository branchRepository, ModelMapper modelMapper) {
+    public BranchServiceImpl(BranchRepository branchRepository, ModelMapper modelMapper, BankRepository bankRepository) {
         this.branchRepository = branchRepository;
         this.modelMapper = modelMapper;
+        this.bankRepository = bankRepository;
+    }
+
+
+    @Override
+    public BranchDto createBranch(Long bankId, BranchDto branchDto) {
+        Branch branch =mapToEntity(branchDto);//map dto to entity
+        //set bank to branch
+        //retrieve bank entity by id
+        Bank bank = bankRepository.findById(bankId).orElseThrow(
+                () -> new ResourceNotFoundException("Bank", "id", bankId));
+        //set bank to branch entity
+        branch.setBank(bank);
+        //branch entity to DB
+        Branch newBranch = branchRepository.save(branch);
+        return mapToDto(newBranch);
+
     }
 
     @Override
-    public BranchDto createBranch(BranchDto branchDto) {
-        log.info("Creating branch");
-        //convert Dto to entity
-        Branch branch = mapToEntity(branchDto);
-        Branch newBranch = branchRepository.save(branch);
-        //convert entity to Dto
-        return mapToDto(newBranch);
+    public List<BranchDto> getBranchByBankId(Long bankId) {
+        log.info("Getting all branches by bank id");
+        List<Branch> branches=branchRepository.findAllByBankId(bankId);
+        List<BranchDto> collect = branches.stream().map(this::mapToDto).collect(Collectors.toList());
+        return collect;
     }
 
     @Override
     public BranchResponse getAllBranches(int pageNo, int pageSize, String sortBy, String sortDir) {
-        log.info("Getting all branches");
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(pageNo, pageSize, sort);
-        //create a pageable instance
-        org.springframework.data.domain.Page<Branch> branches = branchRepository.findAll(pageable);
-        //get content for page object
-        List<Branch> listOfBranch = branches.getContent();
-        List<BranchDto> content = listOfBranch.stream().map(this::mapToDto).toList();
-        BranchResponse branchResponse = new BranchResponse();
+        Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable=org.springframework.data.domain.PageRequest.of(pageNo,pageSize,sort);
+        //create Pageble instance
+        Page<Branch> branchPage=branchRepository.findAll(pageable);
+        //get content from page
+        List<Branch> branches=branchPage.getContent();
+        List<BranchDto> content = branches.stream().map(this::mapToDto).collect(Collectors.toList());
+        BranchResponse branchResponse=new BranchResponse();
         branchResponse.setContent(content);
-        branchResponse.setPageNo(branches.getNumber());
-        branchResponse.setPageSize(branches.getSize());
-        branchResponse.setTotalElements(branches.getNumberOfElements());
-        branchResponse.setTotalPages(branches.getTotalPages());
-        branchResponse.setLast(branches.isLast());
+        branchResponse.setPageNo(branchPage.getNumber());
+        branchResponse.setPageSize(branchPage.getSize());
+        branchResponse.setTotalPages(branchPage.getTotalPages());
+        branchResponse.setTotalElements((int) branchPage.getTotalElements());
         return branchResponse;
     }
 
     @Override
-    public BranchDto getBranchById(Long id) {
-        log.info("Getting branch by id = {}", id);
-        //check if branch exists
-        Branch branch = branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
+    public BranchDto getBranchById(Long bankId, Long branchId) {
+        log.info("Getting branch by id");
+       Bank bank= bankRepository.findById(bankId).orElseThrow(
+                () -> new ResourceNotFoundException("Bank", "id", bankId));
+        Branch branch=branchRepository.findById(branchId).orElseThrow(
+                () -> new ResourceNotFoundException("Branch", "id", branchId));
+        if(branch.getBank().getId()!=bankId){
+            throw new ResourceNotFoundException("Branch", "id", branchId);
+        }
         return mapToDto(branch);
     }
 
     @Override
-    public BranchDto updateBranch(BranchDto branchDto, Long id) {
-        log.info("Updating branch with id = {}", id);
-        //check if branch exists
-        Branch branch =branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
+    public BranchDto updateBranch(Long bankId, Long branchId, BranchDto branchDto) {
+        log.info("Updating branch by id");
+        Bank bank= bankRepository.findById(bankId).orElseThrow(
+                () -> new ResourceNotFoundException("Bank", "id", bankId));
+        Branch branch=branchRepository.findById(branchId).orElseThrow(
+                () -> new ResourceNotFoundException("Branch", "id", branchId));
+        if(branch.getBank().getId()!=bankId){
+            throw new ResourceNotFoundException("Branch", "id", branchId);
+        }
         branch.setBranchName(branchDto.getBranchName());
         branch.setBranchCode(branchDto.getBranchCode());
-        Branch updatedBranch = branchRepository.save(branch);
+        Branch updatedBranch=branchRepository.save(branch);
         return mapToDto(updatedBranch);
     }
 
     @Override
-    public void deleteBranchById(Long id) {
-        log.info("Deleting branch with id = {}", id);
-        //check if branch exists
-        Branch branch = branchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch", "id", id));
+    public void deleteBranch(Long bankId, Long branchId) {
+        log.info("Deleting branch by id");
+        Bank bank= bankRepository.findById(bankId).orElseThrow(
+                () -> new ResourceNotFoundException("Bank", "id", bankId));
+        Branch branch=branchRepository.findById(branchId).orElseThrow(
+                () -> new ResourceNotFoundException("Branch", "id", branchId));
+        if(branch.getBank().getId()!=bankId){
+            throw new ResourceNotFoundException("Branch", "id", branchId);
+        }
         branchRepository.delete(branch);
 
     }
+
     //convert entity to dto
     private BranchDto mapToDto(Branch branch) {
 
@@ -95,6 +130,5 @@ public class BranchServiceImpl implements BranchService {
         return modelMapper.map(branchDto, Branch.class);
 
     }
-
 }
 

@@ -1,7 +1,9 @@
 package com.deltacode.kcb.service;
 
+import com.deltacode.kcb.entity.BusinessType;
 import com.deltacode.kcb.entity.UserApp;
 import com.deltacode.kcb.helper.ExcelHelper;
+import com.deltacode.kcb.payload.BusinessTypeDto;
 import com.deltacode.kcb.payload.UserAppDto;
 import com.deltacode.kcb.payload.UserAppResponse;
 import com.deltacode.kcb.repository.UserRepository;
@@ -55,6 +57,26 @@ public class ExcelService {
         userAppResponse.setPageNo(user.getNumber());
         userAppResponse.setPageSize(user.getSize());
         return userAppResponse;
+
+
+    }
+    //update user
+    public UserAppDto updateUser(UserAppDto userAppDto, Long id) {
+        log.info("Updating user by id {}", id);
+        UserApp userApp = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        userApp.setFirstName(userAppDto.getFirstName());
+        userApp.setLastName(userAppDto.getLastName());
+        userApp.setEmail(userAppDto.getEmail());
+        userApp.setPhoneNumber(userAppDto.getPhoneNumber());
+        userApp.setUsername(userAppDto.getUsername());
+        userRepository.save(userApp);
+        return mapToDto(userApp);
+    }
+    //delete user
+    public void deleteUserById(Long id) {
+        log.info("Deleting User by id {}", id);
+        UserApp userApp = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.delete(userApp);
 
 
     }

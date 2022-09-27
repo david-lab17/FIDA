@@ -19,7 +19,7 @@ public class UserAppDto extends Auditable<String> {
     private String lastName;
     private String phoneNumber;
     private String middleName;
-    private java.util.Date dateOfBirth;
+    private String dateOfBirth;
     private Set<Role> roles;
 
 }

@@ -32,5 +32,8 @@ public class Branch extends Auditable<String> {
     private String branchName;
     private String branchCode;
     private Boolean status=true;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id",nullable = false)
+    private Bank bank;
     private Boolean deleted = Boolean.FALSE;
 }

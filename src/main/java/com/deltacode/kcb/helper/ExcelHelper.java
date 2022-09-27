@@ -81,7 +81,7 @@ public class ExcelHelper {
                         case MIDDLE_NAME_COLUMN_INDEX -> userApp.setMiddleName(currentCell.getStringCellValue());
                         case LAST_NAME_COLUMN_INDEX -> userApp.setLastName(currentCell.getStringCellValue());
                         case EMAIL_COLUMN_INDEX -> userApp.setEmail(currentCell.getStringCellValue());
-                        case DATE_OF_BIRTH_COLUMN_INDEX -> userApp.setDateOfBirth(currentCell.getDateCellValue());
+                        case DATE_OF_BIRTH_COLUMN_INDEX -> userApp.setDateOfBirth(String.valueOf(currentCell.getDateCellValue()));
                         case PHONE_NUMBER_COLUMN_INDEX -> userApp.setPhoneNumber(currentCell.getStringCellValue());
                         case PASSWORD_COLUMN_INDEX -> userApp.setPassword(passwordEncoder.encode(currentCell.getStringCellValue()));
                         case USER_NAME_COLUMN_INDEX -> userApp.setUsername(currentCell.getStringCellValue());

@@ -4,6 +4,8 @@ import com.deltacode.kcb.entity.UserApp;
 import com.deltacode.kcb.exception.UserNotFoundException;
 import com.deltacode.kcb.helper.ExcelHelper;
 import com.deltacode.kcb.message.ResponseMessage;
+import com.deltacode.kcb.payload.BusinessTypeDto;
+import com.deltacode.kcb.payload.UserAppDto;
 import com.deltacode.kcb.payload.UserAppResponse;
 import com.deltacode.kcb.service.ExcelService;
 import com.deltacode.kcb.service.impl.UserService;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 
 @Api(value = "Upload User  Rest Api")
@@ -172,6 +175,20 @@ public UserAppResponse getAllUsers(
         }
 
         return "message";
+    }
+    //update user
+    @ApiOperation(value = "Update User  Api")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    public UserAppDto updateUser(@Valid @RequestBody UserAppDto userAppDto, @PathVariable Long id){
+        return excelService.updateUser(userAppDto,id);
+    }
+    //delete user
+    @ApiOperation(value = "Delete User  Api")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
+    public void deleteUser(@PathVariable Long id){
+        excelService.deleteUserById(id);
     }
 
 }
