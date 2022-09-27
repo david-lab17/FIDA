@@ -1,5 +1,6 @@
 package com.deltacode.kcb.controller;
 
+import com.deltacode.kcb.entity.Branch;
 import com.deltacode.kcb.payload.BranchDto;
 import com.deltacode.kcb.payload.BranchResponse;
 import com.deltacode.kcb.payload.TeamDto;
@@ -25,11 +26,10 @@ public class BranchController {
     private final BranchService branchService;
 
     //create branch
-    //create team
     @ApiOperation(value = "Create Branch REST API")
     @PostMapping("/bank/{bankId}/branch")
     public ResponseEntity<BranchDto> createBranch(@PathVariable(value = "bankId") Long bankId,
-                                                  @Valid @RequestBody BranchDto branchDto) {
+                                               @Valid @RequestBody BranchDto branchDto) {
         return new ResponseEntity<>(branchService.createBranch(bankId, branchDto), HttpStatus.CREATED);
     }
 
