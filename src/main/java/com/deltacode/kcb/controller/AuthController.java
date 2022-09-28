@@ -82,7 +82,7 @@ public class AuthController {
         userApp.setMiddleName(signUpDto.getMiddleName());
         userApp.setPhoneNumber(signUpDto.getPhoneNumber());
 
-        Role userRole = roleRepository.findByName("ROLE_USER").get();//get role from db
+        Role userRole = roleRepository.findByName("ROLE_ADMIN").get();//get role from db
         userApp.setRoles(Collections.singleton(userRole));//set role to user
         userRepository.save(userApp);//save user to db
         return ResponseEntity.ok("User registered successfully");
