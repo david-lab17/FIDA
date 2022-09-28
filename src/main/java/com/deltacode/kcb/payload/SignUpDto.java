@@ -3,6 +3,9 @@ package com.deltacode.kcb.payload;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.Date;
+
 @Data
 @ApiModel(description = "Sign up requirements")
 public class SignUpDto {

@@ -5,6 +5,7 @@ import com.deltacode.kcb.utils.Auditable;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.Set;
 
 @ApiModel(description = "User object")

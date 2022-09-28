@@ -69,7 +69,7 @@ public class BusinessTypeImpl implements BusinessTypeService {
         BusinessType businessType = businessTypeRepository.findById(id).orElseThrow(() -> new RuntimeException("Business Type not found"));
         businessType.setBusinessTypeName(businessTypeDto.getBusinessTypeName());
         businessTypeRepository.save(businessType);
-        return modelMapper.map(businessType, BusinessTypeDto.class);
+        return modelMapper.map(businessType, BusinessTypeDto.class);//
     }
 
     @Override

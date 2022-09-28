@@ -8,6 +8,7 @@ import com.deltacode.kcb.payload.BranchResponse;
 import com.deltacode.kcb.repository.BankRepository;
 import com.deltacode.kcb.repository.BranchRepository;
 import com.deltacode.kcb.service.BranchService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 
 @Service
 public class BranchServiceImpl implements BranchService {
@@ -27,11 +29,7 @@ public class BranchServiceImpl implements BranchService {
     private final ModelMapper modelMapper;
     private  final BankRepository bankRepository;
 
-    public BranchServiceImpl(BranchRepository branchRepository, ModelMapper modelMapper, BankRepository bankRepository) {
-        this.branchRepository = branchRepository;
-        this.modelMapper = modelMapper;
-        this.bankRepository = bankRepository;
-    }
+
 
 
     @Override
