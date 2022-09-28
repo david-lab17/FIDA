@@ -50,14 +50,14 @@ public class AccountTypeController {
     }
     //update account type
     @ApiOperation(value = "Update Acc Type Api")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public AccountTypeDto updateAccountType(@Valid @RequestBody AccountTypeDto accountTypeDto,@PathVariable Long id){
         return accountTypeService.updateAccountTypes(accountTypeDto,id);
     }
     //delete account type
     @ApiOperation(value = "Delete Acc Type Api")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteAccountTypeById(@PathVariable Long id){
         accountTypeService.deleteAccountTypeById(id);

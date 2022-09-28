@@ -75,9 +75,11 @@ public class AccountTypeImpl implements AccountTypeService {
         accountType.setAccountTypeCode(accountTypeDto.getAccountTypeCode());
         accountType.setStatus(accountTypeDto.isStatus());
         AccountType updatedAccountType = accountTypeRepository.save(accountType);
-        return mapToDto(updatedAccountType);
+        mapToDto(updatedAccountType);
+        return null;
 
     }
+
 
     @Override
     public void deleteAccountTypeById(Long id) {
