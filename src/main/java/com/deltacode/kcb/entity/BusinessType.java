@@ -18,16 +18,16 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "business_type_tb")
-    @SQLDelete(sql = "UPDATE business_type_tb SET deleted = true WHERE id = ?")
-    @Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE business_type_tb SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class BusinessType extends Auditable<String> {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-
     private Long id;
     private String businessTypeName;
     private Boolean status=true;
     private Boolean deleted = Boolean.FALSE;
+
 }

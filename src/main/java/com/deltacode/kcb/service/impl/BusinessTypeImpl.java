@@ -1,8 +1,10 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.BusinessType;
+import com.deltacode.kcb.entity.ComplaintType;
 import com.deltacode.kcb.payload.BusinessTypeDto;
 import com.deltacode.kcb.payload.BusinessTypeResponse;
+import com.deltacode.kcb.payload.ComplaintTypeDto;
 import com.deltacode.kcb.repository.BusinessTypeRepository;
 import com.deltacode.kcb.service.BusinessTypeService;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +71,7 @@ public class BusinessTypeImpl implements BusinessTypeService {
         BusinessType businessType = businessTypeRepository.findById(id).orElseThrow(() -> new RuntimeException("Business Type not found"));
         businessType.setBusinessTypeName(businessTypeDto.getBusinessTypeName());
         businessTypeRepository.save(businessType);
-        return modelMapper.map(businessType, BusinessTypeDto.class);//
+        return modelMapper.map(businessType, BusinessTypeDto.class);
     }
 
     @Override

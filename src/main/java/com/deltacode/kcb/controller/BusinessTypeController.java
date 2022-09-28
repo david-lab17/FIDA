@@ -2,6 +2,7 @@ package com.deltacode.kcb.controller;
 
 import com.deltacode.kcb.payload.BusinessTypeDto;
 import com.deltacode.kcb.payload.BusinessTypeResponse;
+import com.deltacode.kcb.payload.ComplaintTypeDto;
 import com.deltacode.kcb.service.BusinessTypeService;
 import com.deltacode.kcb.utils.AppConstants;
 import io.swagger.annotations.ApiOperation;
@@ -50,7 +51,7 @@ public class BusinessTypeController {
     @ApiOperation(value = "Update Business Type Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public BusinessTypeDto updateBusinessType(@Valid @RequestBody BusinessTypeDto businessTypeDto, @PathVariable Long id){
+    public BusinessTypeDto updateBusinessType(@Valid @RequestBody BusinessTypeDto businessTypeDto,@PathVariable Long id){
         return businessTypeService.updateBusinessTypes(businessTypeDto,id);
     }
     //delete account type

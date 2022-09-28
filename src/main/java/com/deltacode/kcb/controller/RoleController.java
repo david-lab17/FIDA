@@ -1,13 +1,10 @@
 package com.deltacode.kcb.controller;
 
 import com.deltacode.kcb.entity.Role;
-import com.deltacode.kcb.entity.UserApp;
 import com.deltacode.kcb.service.RoleService;
 import com.deltacode.kcb.service.impl.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,16 +25,7 @@ public class RoleController {
 
 //
 //    }
-//    @GetMapping("/user/Edit/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public String editUser(@PathVariable Long id, Model model){
-//        UserApp user = userService.findById(id);
-//        model.addAttribute("user", user);
-//        model.addAttribute("userRoles", roleService.getUserRoles(user));
-//        model.addAttribute("userNotRoles", roleService.getUserNotRoles(user));
-//        return user.toString();
-//    }
-    @GetMapping("roles/findById/{id}")
+@GetMapping("roles/findById/{id}")
     @ResponseBody
     public Role findById(@PathVariable Long id) {
         return roleService.findById(id);
