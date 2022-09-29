@@ -72,6 +72,11 @@ public class ExcelService {
         userRepository.save(userApp);
         return mapToDto(userApp);
     }
+    public UserAppDto getUserById(Long id) {
+        log.info("Getting user by id {}", id);
+        UserApp userApp = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));//get user by id if exists
+        return mapToDto(userApp);//map user to dto
+    }
     //delete user
     public void deleteUserById(Long id) {
         log.info("Deleting User by id {}", id);

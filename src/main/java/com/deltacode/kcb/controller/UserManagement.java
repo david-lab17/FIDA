@@ -178,14 +178,22 @@ public UserAppResponse getAllUsers(
     }
     //update user
     @ApiOperation(value = "Update User  Api")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
     public UserAppDto updateUser(@Valid @RequestBody UserAppDto userAppDto, @PathVariable Long id){
         return excelService.updateUser(userAppDto,id);
     }
+
+    //find user by id
+    @ApiOperation(value = "Find User by Id  Api")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/find/{id}")
+    public UserAppDto findUserById(@PathVariable Long id){
+        return excelService.getUserById(id);
+    }
     //delete user
     @ApiOperation(value = "Delete User  Api")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id){
         excelService.deleteUserById(id);
