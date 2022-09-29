@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 @CrossOrigin(origins = "*")
 @Api(value = "Auth Controller for Field Agent Rest Api")
 @RestController
@@ -48,7 +51,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ApiOperation(value = "Login Api")
-    public ResponseEntity<JWTAuthResponse>authenticateUser(@RequestBody LoginDto loginDto){
+    public ResponseEntity<?>authenticateUser(@RequestBody LoginDto loginDto){
         Authentication authentication =authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(),
                  loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -56,8 +59,13 @@ public class AuthController {
         String token= tokenProvider.generateToken(authentication);
         //get user details from authentication
         UserDetails userDetails=(UserDetails)authentication.getPrincipal();
+        String username=userDetails.getUsername();
+        //get user roles
+        List<String> roles=userDetails.getAuthorities().stream().map(item->item.getAuthority()).collect(Collectors.toList());
+        //return response
+        return ResponseEntity.ok(new JWTAuthResponse(token,username,roles));
         //return response entity
-        return ResponseEntity.ok(new JWTAuthResponse(token,"Bearer"));
+
 //        return ResponseEntity.ok(new JWTAuthResponse(token, "Bearer"));
 
     }
