@@ -11,9 +11,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.Utilities;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Slf4j
 
 @Service
@@ -27,11 +32,35 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
     }
 
     @Override
-    public LiquidationTypeDto createLiquidationType(LiquidationTypeDto liquidationTypeDto) {
-        log.info("Creating liquidation type");
-        LiquidationType liquidationType = modelMapper.map(liquidationTypeDto, LiquidationType.class);
-        LiquidationType newLiquidationType = liquidationRepository.save(liquidationType);
-        return modelMapper.map(newLiquidationType, LiquidationTypeDto.class);
+    public ResponseEntity<?> createLiquidationType(LiquidationTypeDto liquidationTypeDto) {
+        ConcurrentHashMap<String,Object>responseObject=new ConcurrentHashMap<>();
+        ConcurrentHashMap<String,Object> responseParams=new ConcurrentHashMap<>();
+        try {
+            log.info("Creating liquidation type");
+            //convert Dto to entity
+            LiquidationType liquidationType = mapToEntity(liquidationTypeDto);
+            LiquidationType newLiquidationType = liquidationRepository.save(liquidationType);
+//            //convert entity to Dto
+//            return mapToDto(newLiquidationType);
+            responseObject.put("status", "success");
+            responseObject.put("message", "Liquidation type "
+                    +liquidationTypeDto.getLiquidationTypeName()+" successfully created");
+            responseObject.put("data", responseParams);
+            //convert entity to Dto
+             mapToDto(newLiquidationType);
+             return ResponseEntity.ok(responseObject);
+
+
+        } catch (
+                Exception e) {
+            log.error("Error creating liquidation type", e);
+            responseObject.put("status", "error");
+            responseObject.put("message", "Error creating liquidation type");
+            responseObject.put("data", responseParams);
+            return null;
+        }
+
+
     }
 
     @Override
@@ -55,29 +84,91 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
     }
 
     @Override
-    public LiquidationTypeDto getLiquidationTypeById(Long id) {
+    public ResponseEntity<?> getLiquidationTypeById(Long id) {
         log.info("Getting liquidation type by id = {}", id);
-        LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
-        return modelMapper.map(liquidationType, LiquidationTypeDto.class);
+        ConcurrentHashMap<String, Object> responseObject = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, Object> responseParams = new ConcurrentHashMap<>();
+       try {
+           LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
+
+           responseObject.put("status", "success");
+              responseObject.put("message", "Liquidation type found" + liquidationType.getLiquidationTypeName());
+                responseParams.put("liquidationType", liquidationType);
+                responseObject.put("params", responseParams);
+            modelMapper.map(liquidationType, LiquidationTypeDto.class);
+            return ResponseEntity.ok(responseObject);
+
+
+       } catch (
+                ResourceNotFoundException e) {
+              responseObject.put("status", "error");
+              responseObject.put("message", e.getMessage());
+              responseParams.put("liquidationType", null);
+              responseObject.put("params", responseParams);
+               modelMapper.map(responseObject, LiquidationTypeDto.class);
+                return ResponseEntity.ok(responseObject);
+         }
+
+
     }
 
     @Override
-    public LiquidationTypeDto updateLiquidationType(LiquidationTypeDto liquidationTypeDto, Long id) {
-        log.info("Updating liquidation type by id = {}", id);
-        LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
-        modelMapper.map(liquidationTypeDto, liquidationType);
-        LiquidationType updatedLiquidationType = liquidationRepository.save(liquidationType);
-        return modelMapper.map(updatedLiquidationType, LiquidationTypeDto.class);
+    public ResponseEntity<ConcurrentHashMap<String, Object>> updateLiquidationType(LiquidationTypeDto liquidationTypeDto, Long id) {
+        ConcurrentHashMap<String, Object> responseObject = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, Object> responseParams = new ConcurrentHashMap<>();
+        try {
+            log.info("Updating liquidation type with id = {}", id);
+            LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
+            //convert Dto to entity
+            LiquidationType updatedLiquidationType = mapToEntity(liquidationTypeDto);
+            updatedLiquidationType.setId(id);
+            LiquidationType newLiquidationType = liquidationRepository.save(updatedLiquidationType);
+            responseObject.put("status", "success");
+            responseObject.put("message", "Liquidation type "
+                    +liquidationTypeDto.getLiquidationTypeName()+" successfully updated");
+            responseObject.put("data", responseParams);
+            //convert entity to Dto
+             mapToDto(newLiquidationType);
+                return ResponseEntity.ok(responseObject);
+        } catch (ResourceNotFoundException e) {
+            log.error("Error updating liquidation type", e);
+            responseObject.put("status", "error");
+            responseObject.put("message", e.getMessage());
+            responseParams.put("liquidationType", null);
+            responseObject.put("params", responseParams);
+            modelMapper.map(responseObject, LiquidationTypeDto.class);
+            return ResponseEntity.ok(responseObject);
+        }
     }
 
+
+
     @Override
-    public void deleteLiquidationTypeById(Long id) {
+    public ResponseEntity<?> deleteLiquidationTypeById(Long id) {
         log.info("Deleting liquidation type by id = {}", id);
-        LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
-        liquidationRepository.delete(liquidationType);
+        ConcurrentHashMap<String, Object> responseObject = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, Object> responseParams = new ConcurrentHashMap<>();
+        try {
+            LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
+            liquidationRepository.delete(liquidationType);
+            responseObject.put("status", "success");
+            responseObject.put("message", "Liquidation type "
+                    +liquidationType.getLiquidationTypeName()+" successfully deleted");
+            responseParams.put("liquidationType", liquidationType);
+            responseObject.put("params", responseParams);
+            modelMapper.map(liquidationType, LiquidationTypeDto.class);
+            return ResponseEntity.ok(responseObject);
+    } catch (ResourceNotFoundException e) {
+    responseObject.put("status", "error");
+            responseObject.put("message", e.getMessage());
+            responseParams.put("liquidationType", null);
+            responseObject.put("params", responseParams);
+            modelMapper.map(responseObject, LiquidationTypeDto.class);
+            return ResponseEntity.ok(responseObject);
+        }
 
-    }
-    //convert entity to dto
+        }
+        //convert entity to dto
     private LiquidationTypeDto mapToDto(LiquidationType liquidationType) {
 
         return modelMapper.map(liquidationType, LiquidationTypeDto .class);

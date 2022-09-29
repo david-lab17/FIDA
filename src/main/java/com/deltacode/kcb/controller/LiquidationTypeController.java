@@ -29,7 +29,7 @@ public class LiquidationTypeController {
     @ApiOperation(value = "Create Liquidation Type Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<LiquidationTypeDto> createLiquidationType(@Valid @RequestBody LiquidationTypeDto liquidationTypeDto) {
+    public ResponseEntity<?> createLiquidationType(@Valid @RequestBody LiquidationTypeDto liquidationTypeDto) {
         return new ResponseEntity<>(liquidationTypeService.createLiquidationType(liquidationTypeDto), HttpStatus.CREATED);
     }
 
@@ -48,15 +48,15 @@ public class LiquidationTypeController {
     //get liquidationType by id
     @ApiOperation(value = "Fetching Liquidation Type by Id Api")
     @GetMapping("/{id}")
-    public ResponseEntity<LiquidationTypeDto> getLiquidationTypeById(@PathVariable Long id) {
-        return new ResponseEntity<>(liquidationTypeService.getLiquidationTypeById(id), HttpStatus.OK);
+    public ResponseEntity<?> getLiquidationTypeById(@PathVariable Long id) {
+        return liquidationTypeService.getLiquidationTypeById(id);
     }
 
     //update liquidationType
     @ApiOperation(value = "Update Liquidation Type Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public LiquidationTypeDto updateLiquidationType(@Valid @RequestBody LiquidationTypeDto liquidationTypeDto, @PathVariable Long id) {
+    public ResponseEntity<?> updateLiquidationType(@Valid @RequestBody LiquidationTypeDto liquidationTypeDto, @PathVariable Long id) {
         return liquidationTypeService.updateLiquidationType(liquidationTypeDto, id);
     }
     //delete liquidationType
@@ -67,4 +67,5 @@ public class LiquidationTypeController {
         liquidationTypeService.deleteLiquidationTypeById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
