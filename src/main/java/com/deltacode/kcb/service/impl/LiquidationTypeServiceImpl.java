@@ -121,7 +121,6 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
             LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
             //convert Dto to entity
             LiquidationType updatedLiquidationType = mapToEntity(liquidationTypeDto);
-            updatedLiquidationType.setId(id);
             LiquidationType newLiquidationType = liquidationRepository.save(updatedLiquidationType);
             responseObject.put("status", "success");
             responseObject.put("message", "Liquidation type "

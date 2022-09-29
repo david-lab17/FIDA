@@ -19,7 +19,7 @@ public class LiquidationTypeDto extends Auditable<String> {
     @ApiModelProperty(value = "Branch name")
     private String liquidationTypeName;
     @ApiModelProperty(value = "Liquidation status")
-    private boolean status=true;
+    private Boolean status=true;
 
 
 }
