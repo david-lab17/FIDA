@@ -83,8 +83,8 @@ public class BankServiceImpl implements BankService {
             log.info("Updating bank with id = {}",id);
             //check if bank exists with id
             Bank bank = bankRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
-            Bank updatedBank = mapToEntity(bankDto);//convert dto to entity
-            Bank newBank = bankRepository.save(updatedBank);//save updated bank
+//            Bank updatedBank = mapToEntity(bankDto);//convert dto to entity
+            Bank newBank = bankRepository.save(bank);//save updated bank
             responseObject.put("status", "success");//set status
             responseObject.put("message", "bank "
                     +bankDto.getBankName()+" successfully updated");//set message
