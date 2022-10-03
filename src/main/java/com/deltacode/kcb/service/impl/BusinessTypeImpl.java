@@ -2,9 +2,12 @@ package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.BusinessType;
 import com.deltacode.kcb.entity.ComplaintType;
+import com.deltacode.kcb.entity.LiquidationType;
+import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.BusinessTypeDto;
 import com.deltacode.kcb.payload.BusinessTypeResponse;
 import com.deltacode.kcb.payload.ComplaintTypeDto;
+import com.deltacode.kcb.payload.LiquidationTypeDto;
 import com.deltacode.kcb.repository.BusinessTypeRepository;
 import com.deltacode.kcb.service.BusinessTypeService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +15,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Slf4j
 
 @Service
@@ -66,12 +73,32 @@ public class BusinessTypeImpl implements BusinessTypeService {
     }
 
     @Override
-    public BusinessTypeDto updateBusinessTypes(BusinessTypeDto businessTypeDto, Long id) {
+    public ResponseEntity<?> updateBusinessTypes(BusinessTypeDto businessTypeDto, Long id) {
         log.info("Updating business type by id {}", id);
-        BusinessType businessType = businessTypeRepository.findById(id).orElseThrow(() -> new RuntimeException("Business Type not found"));
-        businessType.setBusinessTypeName(businessTypeDto.getBusinessTypeName());
-        businessTypeRepository.save(businessType);
-        return modelMapper.map(businessType, BusinessTypeDto.class);
+        HashMap<String, Object> responseObject = new HashMap<>();
+        HashMap<String, Object> responseParams = new HashMap<>();
+        try {
+            log.info("Updating liquidation type with id = {}", id);
+            BusinessType businessType = businessTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
+            //convert Dto to entity
+            BusinessType updatedBusinessType = mapToEntity(businessTypeDto);
+            BusinessType newBusinessType = businessTypeRepository.save(updatedBusinessType);
+            responseObject.put("status", "success");
+            responseObject.put("message", "Business type "
+                    +businessTypeDto.getBusinessTypeName()+" successfully updated");
+            responseObject.put("data", responseParams);
+            //convert entity to Dto
+            mapToDto(newBusinessType);
+            return ResponseEntity.ok(responseObject);
+        } catch (ResourceNotFoundException e) {
+            log.error("Error updating business type", e);
+            responseObject.put("status", "error");
+            responseObject.put("message", e.getMessage());
+            responseParams.put("businessType", null);
+            responseObject.put("params", responseParams);
+            modelMapper.map(responseObject, BusinessTypeDto.class);
+            return ResponseEntity.ok(responseObject);
+        }
     }
 
     @Override

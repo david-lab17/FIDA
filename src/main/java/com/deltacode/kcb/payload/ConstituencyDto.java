@@ -1,20 +1,16 @@
 package com.deltacode.kcb.payload;
 
-import com.deltacode.kcb.entity.Constituency;
-import com.deltacode.kcb.entity.County;
-import com.deltacode.kcb.utils.Auditable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @ApiModel(description = "Constituency object")
 @Data
-public class ConstituencyDto extends Auditable<String> {
+public class ConstituencyDto  {
     private Long id;
     @NotEmpty(message = "Name of the Constituency is required")
     @Size(min = 2, message = "Name must have at least 2 characters")

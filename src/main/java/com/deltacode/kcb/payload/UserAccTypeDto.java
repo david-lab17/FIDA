@@ -1,17 +1,15 @@
 package com.deltacode.kcb.payload;
 
-import com.deltacode.kcb.utils.Auditable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @ApiModel(description = "User Acc Type object")
 @Data
-public class UserAccTypeDto extends Auditable<String> {
+public class UserAccTypeDto  {
     private Long id;
 
     @NotEmpty(message = "User Acc type name is required")

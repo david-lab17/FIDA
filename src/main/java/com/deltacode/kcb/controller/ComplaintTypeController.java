@@ -49,7 +49,7 @@ public class ComplaintTypeController {
     //update account type
     @ApiOperation(value = "Update Business Type Api")
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ComplaintTypeDto updateComplaintType(@Valid @RequestBody ComplaintTypeDto complaintType, @PathVariable Long id){
         return complaintTypeService.updateComplaintTypes(complaintType,id);
     }

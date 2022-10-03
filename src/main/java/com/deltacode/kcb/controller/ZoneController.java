@@ -47,7 +47,7 @@ public class ZoneController {
     @ApiOperation(value = "Update Zone Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ZoneDto updateBank(@Valid @RequestBody ZoneDto bankDto,@PathVariable Long id){
+    public ResponseEntity<?> updateBank(@Valid @RequestBody ZoneDto bankDto,@PathVariable Long id){
         return zoneService.updateZone(bankDto,id);
     }
     //delete zone

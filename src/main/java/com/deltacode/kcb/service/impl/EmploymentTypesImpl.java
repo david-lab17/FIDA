@@ -12,8 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 @Slf4j
 @Service
@@ -63,11 +65,26 @@ public class EmploymentTypesImpl implements EmploymentTypeService {
 
     @Override
     public EmploymentTypeDto updateEmploymentTypes(EmploymentTypeDto employmentTypeDto, Long id) {
-        log.info("Updating employment type with id: {}", id);
-        EmploymentType employmentType = employmentTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EmploymentType", "id", id));
-        employmentType.setEmploymentTypeName(employmentTypeDto.getEmploymentTypeName());
-        employmentTypeRepository.save(employmentType);
-        return mapToDto(employmentType);
+        HashMap<String, Object> responseObject = new HashMap<>();
+        HashMap<String, Object> responseParams = new HashMap<>();
+        try {
+            log.info("Updating employment type with id: {}", id);
+            EmploymentType employmentType = employmentTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EmploymentType", "id", id));
+            employmentType.setEmploymentTypeName(employmentTypeDto.getEmploymentTypeName());
+            employmentTypeRepository.save(employmentType);
+            responseObject.put("status", "success");//set status
+            responseObject.put("message", "Employment type "
+                    +employmentTypeDto.getEmploymentTypeName()+" successfully updated");//set message
+            responseObject.put("data", responseParams);
+            return mapToDto(employmentType);
+
+
+        } catch (Exception e) {
+            responseObject.put("status", "failed");
+            responseObject.put("message", e.getMessage());
+            return null;
+        }
+
     }
 
     @Override

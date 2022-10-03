@@ -1,17 +1,12 @@
 package com.deltacode.kcb.entity;
 
-import com.deltacode.kcb.utils.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +20,7 @@ import java.util.Set;
 )
 @SQLDelete(sql = "UPDATE banks_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Bank extends Auditable<String> {
+public class Bank  {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY

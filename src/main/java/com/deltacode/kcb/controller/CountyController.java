@@ -54,7 +54,7 @@ public class CountyController {
     @ApiOperation(value = "Update Bank Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public CountyDto updateCounty(@Valid @RequestBody CountyDto countyDto,@PathVariable Long id){
+    public ResponseEntity<?> updateCounty(@Valid @RequestBody CountyDto countyDto,@PathVariable Long id){
         return countyService.updateCounty(countyDto,id);
     }
 

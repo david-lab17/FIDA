@@ -1,13 +1,10 @@
 package com.deltacode.kcb.entity;
 
-import com.deltacode.kcb.utils.Auditable;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +13,7 @@ import java.util.Set;
 @Table(name = "zone_tb",uniqueConstraints = {@UniqueConstraint(columnNames = {"zoneName"})})
 @SQLDelete(sql = "UPDATE zone_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class Zone  extends Auditable<String> {
+public class Zone   {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,6 +1,7 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.ComplaintType;
+import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.ComplaintTypeDto;
 import com.deltacode.kcb.payload.ComplaintTypeResponse;
 import com.deltacode.kcb.repository.ComplaintTypeRepository;
@@ -64,12 +65,17 @@ public class ComplaintTypeImpl implements ComplaintTypeService {
 
     @Override
     public ComplaintTypeDto updateComplaintTypes(ComplaintTypeDto complaintTypeDto, Long id) {
-        log.info("Updating complaint type by id {}", id);
-        ComplaintType complaintType = complaintTypeRepository.findById(id).orElseThrow();
+        //get post by id from database
+        ComplaintType complaintType = complaintTypeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Complaint", "id", id));
         complaintType.setComplaintTypeName(complaintTypeDto.getComplaintTypeName());
         complaintType.setDescription(complaintTypeDto.getDescription());
-        complaintTypeRepository.save(complaintType);
-        return modelMapper.map(complaintType, ComplaintTypeDto.class);
+
+        ComplaintType updatedComplaintType = complaintTypeRepository.save(complaintType);
+        mapToDto(updatedComplaintType);
+
+
+        return null;
     }
 
     @Override

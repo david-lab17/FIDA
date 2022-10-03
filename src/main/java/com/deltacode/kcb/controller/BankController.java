@@ -51,7 +51,7 @@ public class BankController {
     @ApiOperation(value = "Update Bank Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public BankDto updateBank(@Valid @RequestBody BankDto bankDto,@PathVariable Long id){
+    public ResponseEntity<?> updateBank(@Valid @RequestBody BankDto bankDto,@PathVariable Long id){
         return bankService.updateBank(bankDto,id);
     }
     //delete bank

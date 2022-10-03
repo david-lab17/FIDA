@@ -1,15 +1,10 @@
 package com.deltacode.kcb.entity;
 
-import com.deltacode.kcb.utils.Auditable;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Entity
@@ -18,7 +13,7 @@ import java.util.Date;
         @UniqueConstraint(columnNames = {"email"})})
 @SQLDelete(sql = "UPDATE dsr_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
-public class DSR  extends Auditable<String> {
+public class DSR   {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

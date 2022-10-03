@@ -55,9 +55,9 @@ public class LiquidationTypeController {
     //update liquidationType
     @ApiOperation(value = "Update Liquidation Type Api")
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateLiquidationType(@Valid @RequestBody LiquidationTypeDto liquidationTypeDto, @PathVariable Long id) {
-        return liquidationTypeService.updateLiquidationType(liquidationTypeDto, id);
+    @PostMapping("/update")
+    public ResponseEntity<?> updateLiquidationType(@Valid @RequestBody LiquidationTypeDto liquidationTypeDto) {
+        return liquidationTypeService.updateLiquidationType(liquidationTypeDto);
     }
     //delete liquidationType
     @ApiOperation(value = "Delete Liquidation Type Api")

@@ -51,7 +51,7 @@ public class BusinessTypeController {
     @ApiOperation(value = "Update Business Type Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public BusinessTypeDto updateBusinessType(@Valid @RequestBody BusinessTypeDto businessTypeDto,@PathVariable Long id){
+    public ResponseEntity<?> updateBusinessType(@Valid @RequestBody BusinessTypeDto businessTypeDto,@PathVariable Long id){
         return businessTypeService.updateBusinessTypes(businessTypeDto,id);
     }
     //delete account type

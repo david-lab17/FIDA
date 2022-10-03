@@ -1,9 +1,11 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.Bank;
+import com.deltacode.kcb.entity.LiquidationType;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.BankDto;
 import com.deltacode.kcb.payload.BankResponse;
+import com.deltacode.kcb.payload.LiquidationTypeDto;
 import com.deltacode.kcb.repository.BankRepository;
 import com.deltacode.kcb.service.BankService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +13,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Slf4j
 
 @Service
@@ -70,13 +76,28 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public BankDto updateBank(BankDto bankDto, Long id) {
-        log.info("Updating bank with id = {}",id);
-          Bank bank = bankRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bank", "id", id));
-            bank.setBankName(bankDto.getBankName());
-            bank.setBankCode(bankDto.getBankCode());
-            Bank updatedBank = bankRepository.save(bank);
-            return mapToDto(updatedBank);
+    public ResponseEntity<?> updateBank(BankDto bankDto, Long id) {
+        HashMap<String, Object> responseObject = new HashMap<>();
+        HashMap<String, Object> responseParams = new HashMap<>();
+        try {
+            log.info("Updating bank with id = {}",id);
+            //check if bank exists with id
+            Bank bank = bankRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
+            Bank updatedBank = mapToEntity(bankDto);//convert dto to entity
+            Bank newBank = bankRepository.save(updatedBank);//save updated bank
+            responseObject.put("status", "success");//set status
+            responseObject.put("message", "bank "
+                    +bankDto.getBankName()+" successfully updated");//set message
+            responseObject.put("data", responseParams);//set data
+            //convert entity to Dto
+            mapToDto(newBank);//convert entity to Dto
+            return ResponseEntity.ok(responseObject);//return response
+        } catch (Exception e) {
+            log.error("Error updating County ", e);
+            responseObject.put("status", "failed");
+            responseObject.put("message", e.getMessage());
+            return ResponseEntity.ok().body(responseObject);
+        }
     }
 
     @Override

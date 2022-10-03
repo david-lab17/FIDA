@@ -13,8 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 @Slf4j
 @Service
@@ -65,14 +67,30 @@ public class CountyServiceImpl implements CountyService {
     }
 
     @Override
-    public CountyDto updateCounty(CountyDto countyDto, Long id) {
-        log.info("Updating county with id = {}", id);
-        County county = countyRepository.findById(id).orElseThrow( () -> new RuntimeException("County not found"));
-        county.setCountyName(countyDto.getCountyName());
-        county.setCountyCode(countyDto.getCountyCode());
-        county.setDescription(countyDto.getDescription());
-        countyRepository.save(county);
-        return modelMapper.map(county, CountyDto.class);
+    public ResponseEntity<?> updateCounty(CountyDto countyDto, Long id) {
+        HashMap<String, Object> responseObject = new HashMap<>();
+        HashMap<String,Object>responseParams=new HashMap<>();
+       try {
+           log.info("Updating county with id = {}", id);
+           County county = countyRepository.findById(id).orElseThrow( () -> new RuntimeException("County not found"));
+           county.setCountyName(countyDto.getCountyName());
+           county.setCountyCode(countyDto.getCountyCode());
+           county.setDescription(countyDto.getDescription());
+           County newCounty = countyRepository.save(county);
+           responseObject.put("status", "success");//set status
+           responseObject.put("message", "county "
+                   +countyDto.getCountyName()+" successfully updated");//set message
+           responseObject.put("data", responseParams);
+            mapToDto(newCounty);
+            return ResponseEntity.ok(responseObject);
+       } catch (Exception e) {
+           responseObject.put("status", "error");//set status
+           responseObject.put("message", "county "
+                   +countyDto.getCountyName()+" could not be updated");//set message
+           responseObject.put("data", responseParams);
+           return ResponseEntity.badRequest().body(responseObject);
+       }
+
     }
 
     @Override

@@ -16,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+//@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @Slf4j
 public class SpringBootKcbRestApiApplication   {
 
@@ -28,10 +28,10 @@ public class SpringBootKcbRestApiApplication   {
 		return new ModelMapper();
 	}
 
-	@Bean
-	public AuditorAware<String> auditorAware() {
-		return new SpringSecurityAuditorAware();
-	}
+//	@Bean
+//	public AuditorAware<String> auditorAware() {
+//		return new SpringSecurityAuditorAware();
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootKcbRestApiApplication.class, args);

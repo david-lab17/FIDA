@@ -12,8 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 @Slf4j
 @Service
@@ -64,15 +66,29 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public ZoneDto updateZone(ZoneDto zoneDto, Long id) {
-        log.info("Updating zone by id = {}", id);
-        Zone zone = zoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Zone", "id", id));
-        zone.setZoneName(zoneDto.getZoneName());
-        zone.setZoneDescription(zoneDto.getZoneDescription());
-        zone.setZoneCode(zoneDto.getZoneCode());
-        zone.setStatus(zoneDto.getStatus());
-        Zone updatedZone = zoneRepository.save(zone);
-        return mapToDto(updatedZone);
+    public ResponseEntity<?> updateZone(ZoneDto zoneDto, Long id) {
+        HashMap<String,Object> responseObject= new HashMap<>();
+        HashMap<String,Object> responseParams =new HashMap<>();
+        try {
+            log.info("Updating zone by id = {}", id);
+            Zone zone = zoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Zone", "id", id));
+            zone.setZoneName(zoneDto.getZoneName());
+            zone.setZoneDescription(zoneDto.getZoneDescription());
+            zone.setZoneCode(zoneDto.getZoneCode());
+            zone.setStatus(zoneDto.getStatus());
+            Zone updatedZone = zoneRepository.save(zone);
+            responseObject.put("status", "success");//set status
+            responseObject.put("message", "Zone "
+                    +zoneDto.getZoneName()+" successfully updated");//set message
+            responseObject.put("data", responseParams);
+            mapToDto(updatedZone);
+            return ResponseEntity.ok(updatedZone);
+        } catch (Exception e) {
+            responseObject.put("status", "failed");
+            responseObject.put("message", e.getMessage());
+            return ResponseEntity.ok().body(responseObject);
+        }
+
     }
 
     @Override

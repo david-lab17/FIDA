@@ -52,7 +52,7 @@ public class AccountTypeController {
     @ApiOperation(value = "Update Acc Type Api")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public AccountTypeDto updateAccountType(@Valid @RequestBody AccountTypeDto accountTypeDto,@PathVariable Long id){
+    public ResponseEntity<?> updateAccountType(@Valid @RequestBody AccountTypeDto accountTypeDto,@PathVariable Long id){
         return accountTypeService.updateAccountTypes(accountTypeDto,id);
     }
     //delete account type

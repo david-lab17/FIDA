@@ -1,6 +1,7 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.UserAccType;
+import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.UserAccTypeDto;
 import com.deltacode.kcb.payload.UserAccTypeResponse;
 import com.deltacode.kcb.repository.UserAccTypeRepository;
@@ -10,8 +11,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
 @Slf4j
 @Service
@@ -64,12 +68,29 @@ public class UserAccTypeImpl implements UserAccTypeService {
     }
 
     @Override
-    public UserAccTypeDto updateUserAccTypes(UserAccTypeDto userAccTypeDto, Long id) {
-        log.info("Updating user account type by id = {}", id);
-        UserAccType userAccType=userAccTypeRepository.findById(id).orElseThrow(()->new RuntimeException("User Account Type not found"));
-        userAccType.setUserAccTypeName(userAccTypeDto.getUserAccTypeName());
-        userAccTypeRepository.save(userAccType);
-        return modelMapper.map(userAccType, UserAccTypeDto.class);
+    public ResponseEntity<?> updateUserAccTypes(UserAccTypeDto userAccTypeDto, Long id) {
+        HashMap<String,Object> responseObject= new HashMap<>();
+        HashMap<String,Object> responseParams=new HashMap<>();
+        try {
+            log.info("Updating user account type by id = {}", id);
+            UserAccType userAccType=userAccTypeRepository
+                    .findById(id).orElseThrow(()->new ResourceNotFoundException("User Acc Type", "id", id));
+            userAccType.setUserAccTypeName(userAccTypeDto.getUserAccTypeName());
+            UserAccType updatedUserAcc = userAccTypeRepository.save(userAccType);
+            responseObject.put("status", "success");//set status
+            responseObject.put("message", "user Acc Type "
+                    +userAccTypeDto.getUserAccTypeName()+" successfully updated");//set message
+            responseObject.put("data", responseParams);
+             mapToDto(updatedUserAcc);
+             return  ResponseEntity.ok(responseObject);
+
+
+        } catch (Exception e) {
+            responseObject.put("status", "failed");
+            responseObject.put("message", e.getMessage());
+            return ResponseEntity.ok().body(responseObject);
+        }
+
 
     }
 

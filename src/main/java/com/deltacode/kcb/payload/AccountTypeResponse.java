@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountTypeResponse {
+
     private List<AccountTypeDto> content;
     private int pageNo;
     private int pageSize;

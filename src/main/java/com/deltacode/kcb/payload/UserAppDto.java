@@ -1,16 +1,14 @@
 package com.deltacode.kcb.payload;
 
 import com.deltacode.kcb.entity.Role;
-import com.deltacode.kcb.utils.Auditable;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.Set;
 
 @ApiModel(description = "User object")
 @Data
-public class UserAppDto extends Auditable<String> {
+public class UserAppDto  {
 
 
     private Long id;

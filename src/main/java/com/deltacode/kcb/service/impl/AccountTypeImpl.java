@@ -1,9 +1,11 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.AccountType;
+import com.deltacode.kcb.entity.LiquidationType;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.AccountTypeDto;
 import com.deltacode.kcb.payload.AccountTypeResponse;
+import com.deltacode.kcb.payload.LiquidationTypeDto;
 import com.deltacode.kcb.repository.AccountTypeRepository;
 import com.deltacode.kcb.service.AccountTypeService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +13,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Slf4j
 
 @Service
@@ -66,17 +73,32 @@ public class AccountTypeImpl implements AccountTypeService {
     }
 
     @Override
-    public AccountTypeDto updateAccountTypes(AccountTypeDto accountTypeDto, Long id) {
-        log.info("Updating account type by id = {}", id);
-        //check if accountType exists
-        AccountType accountType = accountTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("AccountType", "id", id));
-        //update accountType
-        accountType.setAccountTypeName(accountTypeDto.getAccountTypeName());
-        accountType.setAccountTypeCode(accountTypeDto.getAccountTypeCode());
-        accountType.setStatus(accountTypeDto.isStatus());
-        AccountType updatedAccountType = accountTypeRepository.save(accountType);
-        mapToDto(updatedAccountType);
-        return null;
+    public ResponseEntity<?> updateAccountTypes(AccountTypeDto accountTypeDto, Long id) {
+        HashMap<String, Object> responseObject = new HashMap<>();
+        HashMap<String, Object> responseParams = new HashMap<>();
+        try {
+            log.info("Updating liquidation type with id = {}", id);
+            AccountType accountType = accountTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
+            accountType.setAccountTypeName(accountTypeDto.getAccountTypeName());
+            accountType.setAccountTypeName(accountTypeDto.getAccountTypeName());
+            accountTypeRepository.save(accountType);
+
+            responseObject.put("status", "success");
+            responseObject.put("message", "Liquidation type "
+                    +accountTypeDto.getAccountTypeName()+" successfully updated");
+            responseObject.put("data", responseParams);
+            //convert entity to Dto
+//            mapToDto(newAccType);
+            return ResponseEntity.ok(responseObject);
+        } catch (Exception e) {
+            log.error("Error updating Acc  type", e);
+            responseObject.put("status", "error");
+            responseObject.put("message", e.getMessage());
+            responseParams.put("accType", null);
+            responseObject.put("params", responseParams);
+            modelMapper.map(responseObject, AccountTypeDto.class);
+            return ResponseEntity.ok(responseObject);
+        }
 
     }
 

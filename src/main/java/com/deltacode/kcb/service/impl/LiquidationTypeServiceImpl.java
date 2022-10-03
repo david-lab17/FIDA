@@ -1,11 +1,14 @@
 package com.deltacode.kcb.service.impl;
 
 import com.deltacode.kcb.entity.LiquidationType;
+import com.deltacode.kcb.entity.Zone;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.LiquidationResponse;
 import com.deltacode.kcb.payload.LiquidationTypeDto;
+import com.deltacode.kcb.payload.ZoneDto;
 import com.deltacode.kcb.repository.LiquidationRepository;
 import com.deltacode.kcb.service.LiquidationTypeService;
+import com.deltacode.kcb.utils.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.Utilities;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -113,24 +117,31 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
     }
 
     @Override
-    public ResponseEntity<ConcurrentHashMap<String, Object>> updateLiquidationType(LiquidationTypeDto liquidationTypeDto, Long id) {
-        ConcurrentHashMap<String, Object> responseObject = new ConcurrentHashMap<>();
-        ConcurrentHashMap<String, Object> responseParams = new ConcurrentHashMap<>();
+    public ResponseEntity<?> updateLiquidationType(LiquidationTypeDto liquidationTypeDto ) {
+        HashMap<String, Object> responseObject = new HashMap<>();
+        HashMap<String, Object> responseParams = new HashMap<>();
         try {
-            log.info("Updating liquidation type with id = {}", id);
-            LiquidationType liquidationType = liquidationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", id));
-            //convert Dto to entity
-            LiquidationType updatedLiquidationType = mapToEntity(liquidationTypeDto);
-            LiquidationType newLiquidationType = liquidationRepository.save(updatedLiquidationType);
+            log.info("Updating liquidation type with id = {}", liquidationTypeDto.getId());
+           Optional<LiquidationType>  optionalLiquidationType= Optional.ofNullable(liquidationRepository
+                   .findById(liquidationTypeDto.getId())
+                   .orElseThrow(() -> new ResourceNotFoundException("LiquidationType", "id", liquidationTypeDto.getId())));//get the liquidation type to be updated
+
+            LiquidationType liquidationType = optionalLiquidationType.get();//get the liquidation type to be updated
+            //update the liquidation type
+            liquidationType.setLiquidationTypeName(liquidationTypeDto.getLiquidationTypeName());
+            liquidationType.setStatus(liquidationTypeDto.getStatus());
+            LiquidationType updatedLiquidationType = liquidationRepository.save(liquidationType);
+
             responseObject.put("status", "success");
             responseObject.put("message", "Liquidation type "
                     +liquidationTypeDto.getLiquidationTypeName()+" successfully updated");
             responseObject.put("data", responseParams);
             //convert entity to Dto
-             mapToDto(newLiquidationType);
-                return ResponseEntity.ok(responseObject);
-        } catch (ResourceNotFoundException e) {
-            log.error("Error updating liquidation type", e);
+            mapToDto(updatedLiquidationType);
+            return ResponseEntity.ok(responseObject);
+
+        } catch (
+                ResourceNotFoundException e) {
             responseObject.put("status", "error");
             responseObject.put("message", e.getMessage());
             responseParams.put("liquidationType", null);
@@ -138,7 +149,10 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
             modelMapper.map(responseObject, LiquidationTypeDto.class);
             return ResponseEntity.ok(responseObject);
         }
+
     }
+//update liquidation type with id = {}
+
 
 
 
@@ -153,15 +167,13 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
             responseObject.put("status", "success");
             responseObject.put("message", "Liquidation type "
                     +liquidationType.getLiquidationTypeName()+" successfully deleted");
-            responseParams.put("liquidationType", liquidationType);
-            responseObject.put("params", responseParams);
+            responseObject.put("data", responseParams);
             modelMapper.map(liquidationType, LiquidationTypeDto.class);
             return ResponseEntity.ok(responseObject);
     } catch (ResourceNotFoundException e) {
     responseObject.put("status", "error");
+            responseObject.put("status", "failed");
             responseObject.put("message", e.getMessage());
-            responseParams.put("liquidationType", null);
-            responseObject.put("params", responseParams);
             modelMapper.map(responseObject, LiquidationTypeDto.class);
             return ResponseEntity.ok(responseObject);
         }
