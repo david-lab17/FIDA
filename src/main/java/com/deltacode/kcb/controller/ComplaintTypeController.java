@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController()
@@ -26,8 +28,11 @@ public class ComplaintTypeController {
     @ApiOperation(value = "Create Complaint Type Api")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ComplaintTypeDto> createComplaintType(@Valid @RequestBody ComplaintTypeDto complaintTypeDto){
-        return  new ResponseEntity<>(complaintTypeService.createComplaintType(complaintTypeDto), HttpStatus.CREATED);
+    @RequestMapping(value = "/create-complain", method = RequestMethod.POST)
+    public ResponseEntity<?> createComplain(@RequestParam("complainDetails") String complainDetails,
+                                            @RequestParam("complainFiles") MultipartFile[] complainFiles,
+                                            HttpServletRequest httpServletRequest) {
+        return  complaintTypeService.addComplain(complainDetails, complainFiles, httpServletRequest);
     }
     //get All account types
     @ApiOperation(value = "Fetching all Complaint Type  Api")

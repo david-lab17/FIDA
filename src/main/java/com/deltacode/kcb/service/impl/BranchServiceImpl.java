@@ -16,7 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,6 +77,8 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public BranchDto getBranchById(Long bankId, Long branchId) {
+        HashMap<String, Objects>responseObject=new HashMap<>();
+        HashMap<String,Object> responseParams =new HashMap<>();
         log.info("Getting branch by id");
        Bank bank= bankRepository.findById(bankId).orElseThrow(
                 () -> new ResourceNotFoundException("Bank", "id", bankId));
