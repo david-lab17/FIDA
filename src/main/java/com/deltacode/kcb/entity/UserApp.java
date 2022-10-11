@@ -1,6 +1,7 @@
 package com.deltacode.kcb.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -32,6 +33,7 @@ public class UserApp {
     private String dateOfBirth;
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

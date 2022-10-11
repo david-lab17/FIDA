@@ -43,7 +43,7 @@ public class RoleService {
     public void assignRole(Long userId, Long roleId){
         UserApp user = userRepository.findById(userId).orElse(null);
         Role role = roleRepository.findById(roleId).orElse(null);
-        Set<Role> userRoles = user.getRoles();
+        Set<Role> userRoles = (Set<Role>) user.getRoles();
         userRoles.add(role);
         user.setRoles(userRoles);
         userRepository.save(user);
@@ -51,14 +51,14 @@ public class RoleService {
 
     public void unassignRole(Long userId, Long roleId){
         UserApp user = userRepository.findById(userId).orElse(null);
-        Set<Role> userRoles = user.getRoles();
+        Set<Role> userRoles = (Set<Role>) user.getRoles();
         userRoles.removeIf(x -> Objects.equals(x.getId(), roleId));
         user.setRoles(userRoles);
         userRepository.save(user);
     }
 
     public Set<Role> getUserRoles(UserApp user){
-        return user.getRoles();
+        return (Set<Role>) user.getRoles();
     }
 
 

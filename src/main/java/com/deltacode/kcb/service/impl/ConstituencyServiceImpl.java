@@ -80,7 +80,7 @@ public class ConstituencyServiceImpl implements ConstituencyService {
         Page<Constituency> constituency=constituencyRepository.findAll(pageable);
         //get content for page object
         List<Constituency> constituencyList=constituency.getContent();
-        List<ConstituencyDto> content=constituencyList.stream().map(this::mapToDto).toList();
+        List<ConstituencyDto> content=constituencyList.stream().map(constituency1 -> mapToDto(constituency1)).collect(Collectors.toList());
         ConstituencyResponse constituencyResponse=new ConstituencyResponse();
         constituencyResponse.setContent(content);
         constituencyResponse.setPageNo(constituency.getNumber());

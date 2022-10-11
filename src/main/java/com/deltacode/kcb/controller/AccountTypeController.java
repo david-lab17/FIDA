@@ -59,7 +59,7 @@ public class AccountTypeController {
     @ApiOperation(value = "Delete Acc Type Api")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public void deleteAccountTypeById(@PathVariable Long id){
-        accountTypeService.deleteAccountTypeById(id);
+    public ResponseEntity<?> deleteAccountTypeById(@PathVariable Long id){
+        return accountTypeService.deleteAccountTypeById(id);
     }
 }

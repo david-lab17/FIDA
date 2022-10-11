@@ -14,7 +14,7 @@
 	<name>spring-boot-kcb-rest-api</name>
 	<description>Spring boot KCB application rest Api</description>
 	<properties>
-		<java.version>18</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

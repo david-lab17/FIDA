@@ -62,7 +62,7 @@ public class WardServiceImpl implements WardService {
         Page<Ward> ward=wardRepository.findAll(pageable);
         //get content for page object
         List<Ward> WardList=ward.getContent();
-        List<WardDto> content=WardList.stream().map(this::mapToDto).toList();
+        List<WardDto> content=WardList.stream().map(ward1 -> mapToDto(ward1)).collect(Collectors.toList());
         WardResponse wardResponse=new WardResponse();
         wardResponse.setContent(content);
         wardResponse.setPageNo(ward.getNumber());

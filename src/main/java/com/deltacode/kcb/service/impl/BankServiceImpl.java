@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 
@@ -55,7 +56,7 @@ public class BankServiceImpl implements BankService {
         Page<Bank> banks=bankRepository.findAll(pageable);
         //get content for page object
         List<Bank> listOfBank = banks.getContent();
-        List<BankDto> content = listOfBank.stream().map(this::mapToDto).toList();
+        List<BankDto> content = listOfBank.stream().map(bank -> mapToDto(bank)).collect(Collectors.toList());
         BankResponse bankResponse =new BankResponse();
         bankResponse.setContent(content);
         bankResponse.setPageNo(banks.getNumber());

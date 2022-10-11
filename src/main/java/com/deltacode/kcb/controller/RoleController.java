@@ -5,8 +5,11 @@ import com.deltacode.kcb.service.RoleService;
 import com.deltacode.kcb.service.impl.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 @CrossOrigin(origins = "*")
 @Api(value = "Role Management")
@@ -47,10 +50,10 @@ public class RoleController {
     //assign role to user
     @ApiOperation(value = "Assign role to user")
     @PostMapping("/roles/assign/{userId}/{roleId}")
-    public String assignRoleToUser(@PathVariable Long userId,
-                                   @PathVariable Long roleId){
-        roleService.assignRole(userId, roleId);
-        return "redirect:/user/Edit/"+userId;
+    public String assignRoleToUser( @PathVariable Long userId,
+                                           @PathVariable Long roleId){
+        roleService.assignRole(userId,roleId);
+        return "redirect:/user/find/"+userId;
     }
     //unassign role to user
     @ApiOperation(value = "Unassign role to user")
@@ -58,7 +61,7 @@ public class RoleController {
     public String unassignRoleToUser(@PathVariable Long userId,
                                      @PathVariable Long roleId){
         roleService.unassignRole(userId, roleId);
-        return "redirect:/user/Edit/"+userId;
+        return "redirect:/user/find/"+userId;
     }
     //delete role
     @ApiOperation(value = "Delete role")

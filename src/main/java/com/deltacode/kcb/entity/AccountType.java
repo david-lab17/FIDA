@@ -14,10 +14,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "accountType_tb",
+        name = "accounttype_tb",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"accountTypeName"})}
 )
-@SQLDelete(sql = "UPDATE accountType_tb SET deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE accounttype_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 public class AccountType  {
     @Id
@@ -29,8 +29,5 @@ public class AccountType  {
     private String accountTypeCode;
     private Boolean status=true;
     private Boolean deleted = Boolean.FALSE;
-    @Column(columnDefinition = "timestamp default now()")
-    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    private Date updated;
 }
 

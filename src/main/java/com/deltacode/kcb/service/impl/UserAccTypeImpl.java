@@ -17,6 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 
@@ -48,7 +50,7 @@ public class UserAccTypeImpl implements UserAccTypeService {
         Page<UserAccType> userAccTypes=userAccTypeRepository.findAll(pageable);
         //get content for page object
         List<UserAccType> listOfUserAccTypes=userAccTypes.getContent();
-        List<UserAccTypeDto> content=listOfUserAccTypes.stream().map(this::mapToDto).toList();
+        List<UserAccTypeDto> content=listOfUserAccTypes.stream().map(userAccType ->mapToDto(userAccType)).collect(Collectors.toList());
         UserAccTypeResponse userAccTypeResponse=new UserAccTypeResponse();
         userAccTypeResponse.setContent(content);
         userAccTypeResponse.setPageNo(userAccTypes.getNumber());
@@ -95,13 +97,26 @@ public class UserAccTypeImpl implements UserAccTypeService {
     }
 
     @Override
-    public void deleteUserAccTypeById(Long id) {
-        log.info("Deleting user account type by id = {}", id);
-        UserAccType userAccType=userAccTypeRepository.findById(id).orElseThrow(()->new RuntimeException("User Account Type not found"));
-        userAccTypeRepository.delete(userAccType);
-
+    public ResponseEntity<?> deleteUserAccTypeById(Long id) {
+        HashMap<String, Object> responseObject = new HashMap<>();
+        HashMap<String, Object> responseParams = new HashMap<>();
+        try {
+            log.info("Deleting user account type by id = {}", id);
+            UserAccType userAccType = userAccTypeRepository
+                    .findById(id).orElseThrow(() -> new ResourceNotFoundException("User Acc Type", "id", id));
+            userAccTypeRepository.delete(userAccType);
+            responseObject.put("status", "success");//set status
+            responseObject.put("message", "user Acc Type "
+                    + userAccType.getUserAccTypeName() + " successfully deleted");//set message
+            responseObject.put("data", responseParams);
+            return ResponseEntity.ok(responseObject);
+        } catch (ResourceNotFoundException e) {
+            responseObject.put("status", "failed");
+            responseObject.put("message", e.getMessage());
+            return ResponseEntity.ok().body(responseObject);
+        }
     }
-    //convert entity to dto
+        //convert entity to dto
     private UserAccTypeDto mapToDto(UserAccType userAccType) {
 
         return modelMapper.map(userAccType, UserAccTypeDto .class);

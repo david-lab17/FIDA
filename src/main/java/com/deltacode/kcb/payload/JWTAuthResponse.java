@@ -1,5 +1,7 @@
 package com.deltacode.kcb.payload;
 
+import com.deltacode.kcb.entity.Privilege;
+
 import java.util.List;
 
 public class JWTAuthResponse {
@@ -9,7 +11,7 @@ public class JWTAuthResponse {
     private List<String> roles;
 
 
-    public JWTAuthResponse(String accessToken, String username, List<String> roles) {
+    public JWTAuthResponse(String accessToken, String username,List<String> roles ) {
         this.accessToken = accessToken;
         this.username = username;
         this.roles = roles;
@@ -39,6 +41,10 @@ public class JWTAuthResponse {
         this.username = username;
     }
 
+
+
+
+
     public List<String> getRoles() {
         return roles;
     }
@@ -46,4 +52,6 @@ public class JWTAuthResponse {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+
+
 }

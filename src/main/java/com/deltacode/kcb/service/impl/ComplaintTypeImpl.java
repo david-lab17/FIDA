@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 
@@ -58,7 +59,7 @@ public class ComplaintTypeImpl implements ComplaintTypeService {
         Page<ComplaintType> complaintTypes = complaintTypeRepository.findAll(pageable);
         //get content for page object
         List<ComplaintType> complaintTypeList = complaintTypes.getContent();
-        List<ComplaintTypeDto> content = complaintTypeList.stream().map(this::mapToDto).toList();
+        List<ComplaintTypeDto> content = complaintTypeList.stream().map(complaintType -> mapToDto(complaintType)).collect(Collectors.toList());
         ComplaintTypeResponse complaintTypeResponse = new ComplaintTypeResponse();
         complaintTypeResponse.setContent(content);
         complaintTypeResponse.setPageNo(complaintTypes.getNumber());

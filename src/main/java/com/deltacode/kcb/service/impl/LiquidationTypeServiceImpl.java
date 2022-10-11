@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 
@@ -76,7 +77,7 @@ public class LiquidationTypeServiceImpl implements LiquidationTypeService {
         Page<LiquidationType> liquidationTypes = liquidationRepository.findAll(pageable);
         //get content for page object
         List<LiquidationType> listOfLiquidationType = liquidationTypes.getContent();
-        List<LiquidationTypeDto> content = listOfLiquidationType.stream().map(this::mapToDto).toList();
+        List<LiquidationTypeDto> content = listOfLiquidationType.stream().map(liquidationType -> mapToDto(liquidationType)).collect(Collectors.toList());
         LiquidationResponse liquidationResponse = new LiquidationResponse();
         liquidationResponse.setContent(content);
         liquidationResponse.setPageNo(liquidationTypes.getNumber());

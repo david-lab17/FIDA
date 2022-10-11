@@ -60,7 +60,7 @@ public class TeamServiceImpl implements TeamService {
         Page<Team> team=teamRepository.findAll(pageable);
         //get content for page object
         List<Team> teamList=team.getContent();
-        List<TeamDto> content=teamList.stream().map(this::mapToDto).toList();
+        List<TeamDto> content=teamList.stream().map(team1 -> mapToDto(team1)).collect(Collectors.toList());
         TeamResponse teamResponse=new TeamResponse();
         teamResponse.setContent(content);
         teamResponse.setPageNo(team.getNumber());

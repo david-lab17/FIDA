@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class ZoneServiceImpl implements ZoneService {
@@ -47,7 +49,7 @@ public class ZoneServiceImpl implements ZoneService {
         Page<Zone> zones = zoneRepository.findAll(pageable);
         //get content for page object
         List<Zone> listOfZone = zones.getContent();
-        List<ZoneDto> content = listOfZone.stream().map(this::mapToDto).toList();
+        List<ZoneDto> content = listOfZone.stream().map(zone -> mapToDto(zone)).collect(Collectors.toList());
         ZoneResponse zoneResponse = new ZoneResponse();
         zoneResponse.setContent(content);
         zoneResponse.setPageNo(zones.getNumber());

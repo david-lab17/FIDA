@@ -87,7 +87,7 @@ public class UserManagement {
 //    }
 @ApiOperation(value = "Fetching all Users  Api")
 @PreAuthorize("hasRole('ADMIN')")
-@GetMapping()
+@GetMapping("user")
 public UserAppResponse getAllUsers(
         @RequestParam(value = "pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
         @RequestParam(value ="pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,

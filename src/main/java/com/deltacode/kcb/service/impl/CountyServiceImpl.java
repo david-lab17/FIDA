@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class CountyServiceImpl implements CountyService {
@@ -48,7 +50,7 @@ public class CountyServiceImpl implements CountyService {
         Page<County> counties=countyRepository.findAll(pageable);
         //get content for page object
         List<County> countyList=counties.getContent();
-        List<CountyDto> content=countyList.stream().map(this::mapToDto).toList();
+        List<CountyDto> content=countyList.stream().map(county -> mapToDto(county)).collect(Collectors.toList());
         CountyResponse countyResponse =new CountyResponse();
         countyResponse.setContent(content);
         countyResponse.setTotalPages(counties.getTotalPages());

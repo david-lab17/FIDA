@@ -10,5 +10,5 @@ public interface UserAccTypeService {
 
     UserAccTypeDto getUserAccTypesById(Long id);
     ResponseEntity<?> updateUserAccTypes(UserAccTypeDto userAccTypeDto, Long id);
-    void deleteUserAccTypeById(Long id);
+    ResponseEntity<?> deleteUserAccTypeById(Long id);
 }

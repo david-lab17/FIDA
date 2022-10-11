@@ -77,19 +77,33 @@ public class ExcelHelper {
 
                     switch (cellIdx) {
                         //first name,Middle name,Last name,E-mail,Date of birth,Phone number,Password,Username.
-                        case FIRST_NAME_COLUMN_INDEX -> userApp.setFirstName(currentCell.getStringCellValue());
-                        case MIDDLE_NAME_COLUMN_INDEX -> userApp.setMiddleName(currentCell.getStringCellValue());
-                        case LAST_NAME_COLUMN_INDEX -> userApp.setLastName(currentCell.getStringCellValue());
-                        case EMAIL_COLUMN_INDEX -> userApp.setEmail(currentCell.getStringCellValue());
-                        case DATE_OF_BIRTH_COLUMN_INDEX -> userApp.setDateOfBirth(String.valueOf(currentCell.getDateCellValue()));
-                        case PHONE_NUMBER_COLUMN_INDEX -> userApp.setPhoneNumber(currentCell.getStringCellValue());
-                        case PASSWORD_COLUMN_INDEX -> userApp.setPassword(passwordEncoder.encode(currentCell.getStringCellValue()));
-                        case USER_NAME_COLUMN_INDEX -> userApp.setUsername(currentCell.getStringCellValue());
-
-                        default -> {
-                        }
+                        case FIRST_NAME_COLUMN_INDEX:
+                            userApp.setFirstName(currentCell.getStringCellValue());
+                            break;
+                            case MIDDLE_NAME_COLUMN_INDEX:
+                                userApp.setMiddleName(currentCell.getStringCellValue());
+                                break;
+                        case LAST_NAME_COLUMN_INDEX:
+                            userApp.setLastName(currentCell.getStringCellValue());
+                            break;
+                            case EMAIL_COLUMN_INDEX:
+                                userApp.setEmail(currentCell.getStringCellValue());
+                                break;
+                        case DATE_OF_BIRTH_COLUMN_INDEX:
+                            userApp.setDateOfBirth(currentCell.getStringCellValue());
+                            break;
+                            case PHONE_NUMBER_COLUMN_INDEX:
+                                userApp.setPhoneNumber(currentCell.getStringCellValue());
+                                break;
+                        case PASSWORD_COLUMN_INDEX:
+                            userApp.setPassword(passwordEncoder.encode(currentCell.getStringCellValue()));
+                            break;
+                            case USER_NAME_COLUMN_INDEX:
+                                userApp.setUsername(currentCell.getStringCellValue());
+                                break;
+                        default:
+                            break;
                     }
-
                     cellIdx++;
                 }
                 //add user to db and assign default  role

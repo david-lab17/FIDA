@@ -68,7 +68,7 @@ public class DSRServiceImpl implements DSRService {
         Page<DSR> dsr=dsrRepository.findAll(pageable);
         //get content for page object
         List<DSR> dsrList=dsr.getContent();
-        List<DSRDto> content=dsrList.stream().map(this::mapToDto).toList();
+        List<DSRDto> content=dsrList.stream().map(dsr1 -> mapToDto(dsr1)).collect(Collectors.toList());
         DSRResponse dsrResponse=new DSRResponse();
         dsrResponse.setContent(content);
         dsrResponse.setPageNo(dsr.getNumber());

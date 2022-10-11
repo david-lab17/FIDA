@@ -1,10 +1,12 @@
 package com.deltacode.kcb.controller;
 
+import com.deltacode.kcb.entity.Privilege;
 import com.deltacode.kcb.entity.Role;
 import com.deltacode.kcb.entity.UserApp;
 import com.deltacode.kcb.payload.JWTAuthResponse;
 import com.deltacode.kcb.payload.LoginDto;
 import com.deltacode.kcb.payload.SignUpDto;
+import com.deltacode.kcb.repository.PrivilegeRepository;
 import com.deltacode.kcb.repository.RoleRepository;
 import com.deltacode.kcb.repository.UserRepository;
 import com.deltacode.kcb.security.JwtTokenProvider;
@@ -42,6 +44,9 @@ public class AuthController {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+
+    private PrivilegeRepository privilegeRepository;
 
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -62,7 +67,9 @@ public class AuthController {
         String username=userDetails.getUsername();
         //get user roles
         List<String> roles=userDetails.getAuthorities().stream().map(item->item.getAuthority()).collect(Collectors.toList());
-        //return response
+
+
+
         return ResponseEntity.ok(new JWTAuthResponse(token,username,roles));
         //return response entity
 

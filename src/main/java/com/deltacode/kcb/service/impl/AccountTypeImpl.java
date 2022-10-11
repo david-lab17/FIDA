@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 
@@ -52,7 +54,7 @@ public class AccountTypeImpl implements AccountTypeService {
         Page<AccountType> accountTypes=accountTypeRepository.findAll(pageable);
         //get content for page object
         List<AccountType> listOfAccountType = accountTypes.getContent();
-        List<AccountTypeDto> content = listOfAccountType.stream().map(this::mapToDto).toList();
+        List<AccountTypeDto> content = listOfAccountType.stream().map(accountType -> mapToDto(accountType)).collect(Collectors.toList());
         AccountTypeResponse accountTypeResponse =new AccountTypeResponse();
         accountTypeResponse.setContent(content);
         accountTypeResponse.setPageNo(accountTypes.getNumber());
@@ -62,7 +64,6 @@ public class AccountTypeImpl implements AccountTypeService {
         accountTypeResponse.setLast(accountTypes.isLast());
         return accountTypeResponse;
     }
-
 
 
     @Override
@@ -104,10 +105,25 @@ public class AccountTypeImpl implements AccountTypeService {
 
 
     @Override
-    public void deleteAccountTypeById(Long id) {
-        log.info("Deleting account type by id = {}", id);
-        AccountType accountType = accountTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("AccountType", "id", id));
-        accountTypeRepository.delete(accountType);
+    public ResponseEntity<?> deleteAccountTypeById(Long id) {
+        HashMap<String,Object> responseObject = new HashMap<>();
+        HashMap<String,Object> responseParams = new HashMap<>();
+
+        try {
+            Optional<AccountType> optionalAccountType = accountTypeRepository.findById(id);
+            AccountType accountType = optionalAccountType.get();
+            accountTypeRepository.delete(accountType);
+            responseObject.put("status", "success");
+            responseObject.put("message", "Account type "
+                    +accountType.getAccountTypeName()+" successfully deleted");
+            responseObject.put("data", responseParams);
+            return ResponseEntity.ok(responseObject);
+        } catch (Exception e) {
+            responseObject.put("status", "failed");
+            responseObject.put("message", e.getMessage());
+            return ResponseEntity.ok().body(responseObject);
+        }
+
 
     }
     //covert Dto to entity

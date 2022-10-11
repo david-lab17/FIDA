@@ -65,7 +65,7 @@ public class BranchServiceImpl implements BranchService {
         Page<Branch> branchPage=branchRepository.findAll(pageable);
         //get content from page
         List<Branch> branches=branchPage.getContent();
-        List<BranchDto> content = branches.stream().map(this::mapToDto).collect(Collectors.toList());//map entity to dto
+        List<BranchDto> content = branches.stream().map(branch -> mapToDto(branch)).collect(Collectors.toList());//map entity to dto
         BranchResponse branchResponse=new BranchResponse();
         branchResponse.setContent(content);
         branchResponse.setPageNo(branchPage.getNumber());

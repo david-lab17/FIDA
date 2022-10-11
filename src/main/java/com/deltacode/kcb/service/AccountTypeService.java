@@ -10,5 +10,5 @@ public interface AccountTypeService {
 
     AccountTypeDto getAccountTypesById(Long id);
     ResponseEntity<?> updateAccountTypes(AccountTypeDto accountTypeDto, Long id);
-    void deleteAccountTypeById(Long id);
+    ResponseEntity<?> deleteAccountTypeById(Long id);
 }

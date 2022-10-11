@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class EmploymentTypesImpl implements EmploymentTypeService {
@@ -45,7 +47,7 @@ public class EmploymentTypesImpl implements EmploymentTypeService {
         Page<EmploymentType> employmentTypes = employmentTypeRepository.findAll(pageable);
         //get content for page object
         List<EmploymentType> listOfEmploymentTypes = employmentTypes.getContent();
-        List<EmploymentTypeDto> content = listOfEmploymentTypes.stream().map(this::mapToDto).toList();
+        List<EmploymentTypeDto> content = listOfEmploymentTypes.stream().map(employmentType ->mapToDto(employmentType)).collect(Collectors.toList());
         EmploymentTypeResponse employmentTypeResponse = new EmploymentTypeResponse();
         employmentTypeResponse.setContent(content);
         employmentTypeResponse.setPageNo(employmentTypes.getNumber());
@@ -88,10 +90,24 @@ public class EmploymentTypesImpl implements EmploymentTypeService {
     }
 
     @Override
-    public void deleteEmploymentTypeById(Long id) {
-        log.info("Deleting employment type with id: {}", id);
-        EmploymentType employmentType = employmentTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EmploymentType", "id", id));
-        employmentTypeRepository.delete(employmentType);
+    public ResponseEntity<?> deleteEmploymentTypeById(Long id) {
+       HashMap<String,Object> responseObject = new HashMap<>();
+       HashMap<String,Object>responseParam= new HashMap<>();
+
+       try {
+              log.info("Deleting employment type with id: {}", id);
+              EmploymentType employmentType = employmentTypeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EmploymentType", "id", id));
+              employmentTypeRepository.delete(employmentType);
+              responseObject.put("status", "success");//set status
+              responseObject.put("message", "Employment type "
+                     +employmentType.getEmploymentTypeName()+" successfully deleted");//set message
+              responseObject.put("data", responseParam);
+              return ResponseEntity.ok(responseObject);
+         } catch (Exception e) {
+              responseObject.put("status", "failed");
+              responseObject.put("message", e.getMessage());
+              return ResponseEntity.ok(responseObject);
+       }
 
     }
     //convert entity to dto

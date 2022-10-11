@@ -1,11 +1,13 @@
 package com.deltacode.kcb.repository;
 
+import com.deltacode.kcb.entity.Privilege;
 import com.deltacode.kcb.entity.Role;
 import org.hibernate.sql.Select;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 @Repository

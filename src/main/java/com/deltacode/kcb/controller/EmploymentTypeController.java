@@ -60,7 +60,7 @@ public class EmploymentTypeController {
     @ApiOperation(value = "Delete Employment Type Api")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public void deleteEmploymentTypeById(@PathVariable Long id){
-        employmentTypeService.deleteEmploymentTypeById(id);
+    public ResponseEntity<?> deleteEmploymentTypeById(@PathVariable Long id){
+        return employmentTypeService.deleteEmploymentTypeById(id);
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 
@@ -53,7 +54,7 @@ public class BusinessTypeImpl implements BusinessTypeService {
         Page<BusinessType> businessTypes=businessTypeRepository.findAll(pageable);
         //get content for page object
         List<BusinessType> businessTypeList=businessTypes.getContent();
-        List<BusinessTypeDto> content=businessTypeList.stream().map(this::mapToDto).toList();
+        List<BusinessTypeDto> content=businessTypeList.stream().map(businessType -> modelMapper.map(businessType, BusinessTypeDto.class)).collect(Collectors.toList());
         BusinessTypeResponse businessTypeResponse=new BusinessTypeResponse();
         businessTypeResponse.setContent(content);
         businessTypeResponse.setPageNo(businessTypes.getNumber());

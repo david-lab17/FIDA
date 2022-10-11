@@ -11,8 +11,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "employmentType_tb")
-@SQLDelete(sql = "UPDATE employmentType_tb SET deleted = true WHERE id = ?")
+@Table(name = "employmenttype_tb")
+@SQLDelete(sql = "UPDATE employmenttype_tb SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 public class EmploymentType {
     @Id
