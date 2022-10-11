@@ -5,6 +5,7 @@ import com.deltacode.kcb.entity.Team;
 import com.deltacode.kcb.entity.Zone;
 import com.deltacode.kcb.exception.ResourceNotFoundException;
 import com.deltacode.kcb.payload.ConstituencyDto;
+import com.deltacode.kcb.payload.ConstituencyResponse;
 import com.deltacode.kcb.payload.TeamDto;
 import com.deltacode.kcb.payload.TeamResponse;
 import com.deltacode.kcb.repository.TeamRepository;
@@ -53,8 +54,14 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public TeamResponse getAllTeams(int pageNo, int pageSize, String sortBy, String sortDir) {
-        log.info("Getting all teams");
-        Sort sort=sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        log.info("Getting all Teams");
+        Sort sort=sortDir.equalsIgnoreCase(Sort
+                .Direction
+                .ASC
+                .name())?Sort.by(sortBy)
+                .ascending():Sort.
+                by(sortBy).
+                descending();
         Pageable pageable= PageRequest.of(pageNo, pageSize, sort);
         //create a pageable instance
         Page<Team> team=teamRepository.findAll(pageable);
